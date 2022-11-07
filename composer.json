@@ -1,0 +1,23 @@
+{
+    "name": "donstrange/modalsupport",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Donstrange\\Modalsupport\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Philipp Gaßner",
+            "email": "philipp.gassner@isaweiden.de"
+        }
+    ],
+    "scripts": {
+        "start": [
+            "Composer\\Config::disableProcessTimeout",
+            "php -S 127.0.0.1:8080"
+        ]
+    },
+    "minimum-stability": "stable",
+    "require": {}
+}
