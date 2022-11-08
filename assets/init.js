@@ -18,12 +18,21 @@ function createOptions(res = null, rej = null) {
       });
 
       form.addEventListener("keydown", (e) => {
-        if (e.key == "Enter") {
-          e.preventDefault();
-          //alert("Key down")
-          res && res(createObjectFromForm(form));
-          form.reset();
-          MicroModal.close(modal.id);
+        switch (e.key) {
+          case "Enter":
+              e.preventDefault();
+              //alert("Key down")
+              res && res(createObjectFromForm(form));
+              form.reset();
+              MicroModal.close(modal.id);
+              break;
+          
+            case "Escape":
+              e.preventDefault();
+              rej && rej();
+              form.reset();
+              MicroModal.close(modal.id);
+              break;
 
           //return false;
         }
