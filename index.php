@@ -5,17 +5,21 @@ use Donstrange\Modalsupport\Modal;
 ?>
 
 <!DOCTYPE html>
+
 <head>
-<?php
-echo Modal::getAssets();
-?>
+    <?php
+    echo Modal::getAssets();
+    ?>
 </head>
 
 <body>
-<?php
-$m = new Modal("modal-1");
-echo $m->getOpenButton("Hallo");
-echo $m->getModalContent();
-?>
+    <?php
+    $m = new Modal("modal-1");
+
+    //if the return values are not interesting
+    //echo $m->getOpenButton("Hello");
+
+    echo $m->getModalContent();
+    ?>
 </body>
 </html>

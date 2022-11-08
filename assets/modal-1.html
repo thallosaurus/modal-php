@@ -1,6 +1,7 @@
-  <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
-    <div class="modal__overlay" tabindex="-1" data-micromodal-close>
-      <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+    <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+      <form action="7">
         <header class="modal__header">
           <h2 class="modal__title" id="modal-1-title">
             Micromodal
@@ -8,14 +9,21 @@
           <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
         </header>
         <main class="modal__content" id="modal-1-content">
-          <p>
-            Try hitting the <code>tab</code> key and notice how the focus stays within the modal itself. Also, <code>esc</code> to close modal.
-          </p>
+          <!-- <p>
+            Try hitting the <code>tab</code> key and notice how the focus stays within the modal itself. Also,
+            <code>esc</code> to close modal.
+          </p>-->
+
+          <!-- Insert Modal Content/form elements here, without submit button and form element -->
+
+          <input type="text" name="test">
         </main>
         <footer class="modal__footer">
-          <button class="modal__btn modal__btn-primary">Continue</button>
-          <button class="modal__btn" data-micromodal-close aria-label="Close this dialog window">Close</button>
+          <input class="modal__btn modal__btn-primary" id="submit" data-ok type="submit">
+          <!-- <button class="modal__btn modal__btn-primary">Continue</button> -->
+          <button class="modal__btn" data-micromodal-close data-cancel aria-label="Close this dialog window">Close</button>
         </footer>
-      </div>
+      </form>
     </div>
   </div>
+</div>
