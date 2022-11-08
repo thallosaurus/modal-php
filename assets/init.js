@@ -66,8 +66,9 @@ function createObjectFromForm(form) {
   let o = {};
 
   for (let t of form) {
-    if (Boolean(t.name)) {
-      //console.log(t.name, t.value);
+    if (Boolean(t.name) && !(Object.keys(t.dataset).includes("modalIgnore"))) {
+      console.log(t.dataset);
+      console.log(t.name, t.value);
       o[t.name] = t.value;
     }
   }

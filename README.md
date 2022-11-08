@@ -2,6 +2,7 @@
 An easy way for PHP Applications to embed Dialog Windows - Powered by [micromodal.js](https://github.com/ghosh/Micromodal)
 
 ### Usage
+If you want to ignore a specific field, append `data-modal-ignore` param to the element
 JavaScript:
 ```js
 openModalById("modal-1")
