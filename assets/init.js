@@ -1,16 +1,26 @@
 let abortSignals = new Map();
 
+/**
+ * Create Options for Micromodal.
+ *
+ * @param {*} [res=null] resolve function of a Promise
+ * @param {*} [rej=null] reject function of a Promise
+ * @return {*} 
+ */
 function createOptions(res = null, rej = null) {
   return {
     onShow: modal => {
+      //is used to remove all event listeners at once after close
       let abortController = new AbortController();
 
       let form = modal.querySelector("form");
       //console.log(form);
       form.addEventListener("submit", (event) => {
         event.preventDefault();
+
         //data-micromodal-close does interfere with the submit listener. so we close it manually
         MicroModal.close(modal.id);
+
         res && res(createObjectFromForm(event.target));
         form.reset();
       }, {
@@ -19,6 +29,7 @@ function createOptions(res = null, rej = null) {
 
       form.addEventListener("keydown", (e) => {
         switch (e.key) {
+          //User used enter to submit form. Close Window and resolve with object
           case "Enter":
               e.preventDefault();
               //alert("Key down")
@@ -27,6 +38,7 @@ function createOptions(res = null, rej = null) {
               MicroModal.close(modal.id);
               break;
           
+            //escape was pressed, close window and reject
             case "Escape":
               e.preventDefault();
               rej && rej();
@@ -71,6 +83,12 @@ window.addEventListener("load", () => {
   //console.debug("Micromodal init");
 });
 
+/**
+ * Returns the fields of a Form as Object. name-attribute becomes the object key
+ * Add data-modal-ignore to the input element to skip it in conversion
+ * @param {*} form
+ * @return {*} 
+ */
 function createObjectFromForm(form) {
   let o = {};
 
@@ -85,6 +103,12 @@ function createObjectFromForm(form) {
   return o;
 }
 
+/**
+ * Opens a new Modal and resolves on submit. Rejects on cancel or close
+ *
+ * @param {string} id
+ * @return {Promise<Object>} 
+ */
 function openModalById(id) {
   return new Promise((res, rej) => {
     let options = createOptions(res, rej);
