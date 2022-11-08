@@ -5,9 +5,12 @@ namespace Donstrange\Modalsupport {
         private static $modals = [];
         
         private string $modalId;
+
+        private string $content;
         
-        function __construct(string $id) {
+        function __construct(string $id, string $content) {
             $this->modalId = $id;
+            $this->content = $content;
             self::$modals[] = $this;
         }
         
@@ -25,8 +28,33 @@ namespace Donstrange\Modalsupport {
         }
         
         public function getModalContent(): string {
-            $content = file_get_contents(__DIR__ . "/../assets/" . $this->modalId . ".html");
-            return $content;
+            //$content = file_get_contents(__DIR__ . "/../assets/" . $this->modalId . ".html");
+
+            $modalRaw = [
+                '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
+                '<div class="modal__overlay" tabindex="-1" data-micromodal-close>',
+                '<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="' . $this->modalId . '-title">',
+                '<form action="#">',
+                '<header class="modal__header">',
+                '<h2 class="modal__title" id="' . $this->modalId . '-title">',
+                'Micromodal',
+                '</h2>',
+                '<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>',
+                '</header>',
+                '<main class="modal__content" id="' . $this->modalId . '-content">',
+                $this->content,
+                '</main>',
+                '<footer class="modal__footer">',
+                '<input class="modal__btn modal__btn-primary" id="submit" data-ok type="submit">',
+                '<button class="modal__btn" data-micromodal-close data-cancel aria-label="Close this dialog window">Close</button>',
+                '</footer>',
+                '</form>',
+                '</div>',
+                '</div>',
+                '</div>'
+            ];
+
+            return join("", $modalRaw);
         }
     }
 }
