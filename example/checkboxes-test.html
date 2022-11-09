@@ -1,0 +1,11 @@
+<label for="fruits"></label>
+<select name="fruits">
+    {% for fruit in fruits %}
+        <option value="0">{{ fruit }}</option>
+    {% endfor %}
+</select>
+
+<p>
+    <label for="accept">Ich akzeptiere diese Eingabe</label>
+    <input type="checkbox" name="accept">
+</p>

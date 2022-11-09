@@ -15,8 +15,9 @@ use Donstrange\Modalsupport\Modal;
         window.addEventListener("load", () => {
             document.querySelector("#openFull")
             .addEventListener("click", (e) => {
-                openModalById("modal-1")
+                openModalById("checkboxes-test")
                 .then(data => {
+                    console.log(data);
                     alert(`Hello ${data.prename} ${data.surname}`)
                 })
                 .catch(() => {
@@ -30,9 +31,13 @@ use Donstrange\Modalsupport\Modal;
 <body>
     <?php
     $content = "<label for='prename'>Vorname<label><input name='prename'><br><label for='surname'>Nachname</label><input name='surname'>";
-    $m = new Modal("modal-1");
+    $m = new Modal("checkboxes-test");
     $m->setData([
-        "test" => "Hello World"
+        "fruits" => [
+            "Apple",
+            "Pear",
+            "Strawberries"
+        ]
     ]);
 
     //if the return values are not interesting
