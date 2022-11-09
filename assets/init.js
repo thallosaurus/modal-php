@@ -97,6 +97,7 @@ function createObjectFromForm(form) {
       console.log(t);
 
       let value;
+
       if (t.type == "checkbox") {
         value = t.checked;
       } else {
