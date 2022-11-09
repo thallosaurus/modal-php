@@ -99,7 +99,7 @@ namespace Donstrange\Modalsupport {
             $content = "";
             if (is_null($this->content)) {
                 //use id as filename
-                $content = file_get_contents($this->modalArtifactsPath . "/" . $this->modalFilename . ".html");
+                $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
             } else {
                 $content = $this->content;
             }
