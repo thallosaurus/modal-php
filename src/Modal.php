@@ -26,7 +26,7 @@ namespace Donstrange\Modalsupport {
         /**
          * Path where all modal artifacts should be loaded from
          */
-        private string $modalArtifactsPath = __DIR__ . "/../example";
+        private static string $modalArtifactsPath = __DIR__ . "/../example";
 
         // private string $modalArtifactName;
         
