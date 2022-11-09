@@ -44,6 +44,8 @@ namespace Donstrange\Modalsupport {
 
         /* TWIG END */
 
+        private string $title = "Micromodal";
+
         // private string $modalArtifactName;
         
         /**
@@ -115,6 +117,10 @@ namespace Donstrange\Modalsupport {
         public function setData(array $data) {
             $this->templateData = $data;
         }
+
+        public function setTitle(string $title) {
+            $this->title = $title;
+        }
         
         /**
          * Returns the HTML for the whole modal
@@ -139,7 +145,7 @@ namespace Donstrange\Modalsupport {
                 '<form action="#">',
                 '<header class="modal__header">',
                 '<h2 class="modal__title" id="' . $this->modalId . '-title">',
-                'Micromodal',
+                $this->title,
                 '</h2>',
                 '<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>',
                 '</header>',
@@ -147,7 +153,7 @@ namespace Donstrange\Modalsupport {
                 $content,
                 '</main>',
                 '<footer class="modal__footer">',
-                '<input class="modal__btn modal__btn-primary" id="submit" data-ok type="submit">',
+                '<input class="modal__btn modal__btn-primary" data-ok type="submit">',
                 '<button class="modal__btn" data-micromodal-close data-cancel aria-label="Close this dialog window">Close</button>',
                 '</footer>',
                 '</form>',
