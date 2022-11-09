@@ -59,6 +59,14 @@ namespace Donstrange\Modalsupport {
             $init = file_get_contents(__DIR__ . "/../assets/init.js");
             return "<style>" . $cssData . "</style>" . "<script>" . $jsData . $init . "</script>";
         }
+
+        public static function getAllModals(): string {
+            $map = array_map(function ($m) {
+                return $m->getModalContent();
+            }, self::$modals);
+
+            return join("", $map);
+        }
         
         /**
          * Returns the HTML for the whole modal
