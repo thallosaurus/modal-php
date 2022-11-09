@@ -31,6 +31,9 @@ use Donstrange\Modalsupport\Modal;
     <?php
     $content = "<label for='prename'>Vorname<label><input name='prename'><br><label for='surname'>Nachname</label><input name='surname'>";
     $m = new Modal("modal-1");
+    $m->setData([
+        "test" => "Hello World"
+    ]);
 
     //if the return values are not interesting
     echo $m->getOpenButton("Open without return values");

@@ -1,5 +1,9 @@
 <?php
 namespace Donstrange\Modalsupport {
+
+    use Twig\Loader\FilesystemLoader;
+    use Twig\Environment;
+
     class Modal {
         
         /**
@@ -18,6 +22,8 @@ namespace Donstrange\Modalsupport {
 
         private string $modalFilename;
 
+        private $data = [];
+
         /**
          * Given content of the modal
          *
@@ -29,6 +35,14 @@ namespace Donstrange\Modalsupport {
          * Path where all modal artifacts should be loaded from
          */
         private static string $modalArtifactsPath = __DIR__ . "/../example";
+
+        /* TWIG */
+
+        private static $fsLoader = null;
+        private static $twig = null;
+        private $templateData = [];
+
+        /* TWIG END */
 
         // private string $modalArtifactName;
         
@@ -44,6 +58,12 @@ namespace Donstrange\Modalsupport {
 
             //default
             $this->modalFilename = $this->modalId;
+
+            //TWIG
+            if (self::$fsLoader == null) {
+                self::$fsLoader = new FilesystemLoader(self::$modalArtifactsPath);
+                self::$twig = new Environment(self::$fsLoader);
+            }
 
             // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
@@ -84,10 +104,16 @@ namespace Donstrange\Modalsupport {
 
         public static function setModalPath($path) {
             self::$modalArtifactsPath = $path;
+            self::$fsLoader = new FilesystemLoader($path);
+            self::$twig = new Environment(self::$fsLoader);
         }
 
         public function setFilename(string $fname) {
             $this->modalFilename = $fname;
+        }
+
+        public function setData(array $data) {
+            $this->templateData = $data;
         }
         
         /**
@@ -98,8 +124,10 @@ namespace Donstrange\Modalsupport {
         public function getModalContent(): string {
             $content = "";
             if (is_null($this->content)) {
-                //use id as filename
-                $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
+
+                // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
+
+                $content = self::$twig->render($this->modalFilename . ".html", $this->templateData);
             } else {
                 $content = $this->content;
             }
