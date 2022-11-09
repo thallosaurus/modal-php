@@ -16,6 +16,8 @@ namespace Donstrange\Modalsupport {
          */
         private string $modalId;
 
+        private string $modalFilename;
+
         /**
          * Given content of the modal
          *
@@ -39,6 +41,9 @@ namespace Donstrange\Modalsupport {
         function __construct(string $id, ?string $content = null) {
             $this->modalId = $id;
             $this->content = $content;
+
+            //default
+            $this->modalFilename = $this->modalId;
 
             // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
@@ -80,6 +85,10 @@ namespace Donstrange\Modalsupport {
         public static function setModalPath($path) {
             self::$modalArtifactsPath = $path;
         }
+
+        public function setFilename(string $fname) {
+            $this->modalFilename = $fname;
+        }
         
         /**
          * Returns the HTML for the whole modal
@@ -90,7 +99,7 @@ namespace Donstrange\Modalsupport {
             $content = "";
             if (is_null($this->content)) {
                 //use id as filename
-                $content = file_get_contents($this->modalArtifactsPath . "/" . $this->modalId . ".html");
+                $content = file_get_contents($this->modalArtifactsPath . "/" . $this->modalFilename . ".html");
             } else {
                 $content = $this->content;
             }
