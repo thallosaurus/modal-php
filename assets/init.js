@@ -104,7 +104,9 @@ function createObjectFromForm(form) {
         value = t.value;
       }
 
-      o[t.name] = value;
+      let key = Boolean(t.name) ? t.name : t.id;
+
+      o[key] = value;
     }
   }
 
