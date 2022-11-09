@@ -21,12 +21,12 @@ namespace Donstrange\Modalsupport {
          *
          * @var string
          */
-        private string $content;
+        private ?string $content;
 
         /**
          * Path where all modal artifacts should be loaded from
          */
-        private string $modalArtifactsPath = __DIR__ . "/example";
+        private string $modalArtifactsPath = __DIR__ . "/../example";
 
         // private string $modalArtifactName;
         
@@ -36,7 +36,7 @@ namespace Donstrange\Modalsupport {
          * @param string $id The id of the modal
          * @param string $content Modal content, must be form elements without form parent element
          */
-        function __construct(string $id, ?string $content) {
+        function __construct(string $id, ?string $content = null) {
             $this->modalId = $id;
             $this->content = $content;
 
@@ -90,7 +90,7 @@ namespace Donstrange\Modalsupport {
             $content = "";
             if (is_null($this->content)) {
                 //use id as filename
-                $content = file_get_contents($this->modalArtifactsPath . "/" . $this->id . ".html");
+                $content = file_get_contents($this->modalArtifactsPath . "/" . $this->modalId . ".html");
             } else {
                 $content = $this->content;
             }

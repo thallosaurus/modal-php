@@ -30,7 +30,7 @@ use Donstrange\Modalsupport\Modal;
 <body>
     <?php
     $content = "<label for='prename'>Vorname<label><input name='prename'><br><label for='surname'>Nachname</label><input name='surname'>";
-    $m = new Modal("modal-1", $content);
+    $m = new Modal("modal-1");
 
     //if the return values are not interesting
     echo $m->getOpenButton("Open without return values");
