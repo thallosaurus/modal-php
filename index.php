@@ -18,7 +18,7 @@ use Donstrange\Modalsupport\Modal;
                 openModalById("checkboxes-test")
                 .then(data => {
                     console.log(data);
-                    alert(`Hello ${data.prename} ${data.surname}`)
+                    alert(`Deine Lieblingsfrüchte sind ${data.fruit}`);
                 })
                 .catch(() => {
                     console.log("Dialog was cancelled");
@@ -34,9 +34,9 @@ use Donstrange\Modalsupport\Modal;
     $m = new Modal("checkboxes-test");
     $m->setData([
         "fruits" => [
-            "Apple",
-            "Pear",
-            "Strawberries"
+            "Äpfel",
+            "Birnen",
+            "Erdbeeren"
         ]
     ]);
 

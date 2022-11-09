@@ -1,11 +1,13 @@
-<label for="fruits"></label>
-<select name="fruits">
-    {% for fruit in fruits %}
+<p>
+    <label for="fruit">Lieblingsfrüchte</label>
+    <select name="fruit">
+        {% for fruit in fruits %}
         <option value="0">{{ fruit }}</option>
-    {% endfor %}
-</select>
+        {% endfor %}
+    </select>
+</p>
 
 <p>
+    <input type="checkbox" name="accept" required>
     <label for="accept">Ich akzeptiere diese Eingabe</label>
-    <input type="checkbox" name="accept">
 </p>
