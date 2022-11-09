@@ -1,5 +1,5 @@
 # modal-php
-An easy way for PHP Applications to embed Dialog Windows - Powered by [micromodal.js](https://github.com/ghosh/Micromodal)
+An easy way for PHP Applications to embed Dialog Windows - Powered by [micromodal.js](https://github.com/ghosh/Micromodal) and [twig](https://twig.symphony.com)
 
 ### Usage
 If you want to ignore a specific field, append `data-modal-ignore` param to the element

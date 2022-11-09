@@ -95,7 +95,6 @@ function createObjectFromForm(form) {
   for (let t of form) {
     if (Boolean(t.name) && !(Object.keys(t.dataset).includes("modalIgnore"))) {
       console.log(t);
-      debugger;
 
       let value;
       if (t.type == "checkbox") {
