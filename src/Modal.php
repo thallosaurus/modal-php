@@ -22,6 +22,13 @@ namespace Donstrange\Modalsupport {
          * @var string
          */
         private string $content;
+
+        /**
+         * Path where all modal artifacts should be loaded from
+         */
+        private string $modalArtifactsPath = __DIR__ . "/example";
+
+        // private string $modalArtifactName;
         
         /**
          * Constructor of the class
@@ -29,9 +36,11 @@ namespace Donstrange\Modalsupport {
          * @param string $id The id of the modal
          * @param string $content Modal content, must be form elements without form parent element
          */
-        function __construct(string $id, string $content) {
+        function __construct(string $id, ?string $content) {
             $this->modalId = $id;
             $this->content = $content;
+
+            // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
         }
         
@@ -67,6 +76,10 @@ namespace Donstrange\Modalsupport {
 
             return join("", $map);
         }
+
+        public static function setModalPath($path) {
+            self::$modalArtifactsPath = $path;
+        }
         
         /**
          * Returns the HTML for the whole modal
@@ -74,7 +87,13 @@ namespace Donstrange\Modalsupport {
          * @return string
          */
         public function getModalContent(): string {
-            //$content = file_get_contents(__DIR__ . "/../assets/" . $this->modalId . ".html");
+            $content = "";
+            if (is_null($this->content)) {
+                //use id as filename
+                $content = file_get_contents($this->modalArtifactsPath . "/" . $this->id . ".html");
+            } else {
+                $content = $this->content;
+            }
 
             $modalRaw = [
                 '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
@@ -88,7 +107,7 @@ namespace Donstrange\Modalsupport {
                 '<button class="modal__close" aria-label="Close modal" data-micromodal-close></button>',
                 '</header>',
                 '<main class="modal__content" id="' . $this->modalId . '-content">',
-                $this->content,
+                $content,
                 '</main>',
                 '<footer class="modal__footer">',
                 '<input class="modal__btn modal__btn-primary" id="submit" data-ok type="submit">',
