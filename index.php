@@ -23,6 +23,14 @@ use Donstrange\Modalsupport\Modal;
                 .catch(() => {
                     console.log("Dialog was cancelled");
                 })
+            });
+
+            document.querySelector("#btntest")
+            .addEventListener("click", (e) => {
+                openModalById("buttontest")
+                .then(e => {
+                    console.log(e);
+                });
             })
         });
     </script>
@@ -40,12 +48,19 @@ use Donstrange\Modalsupport\Modal;
         ]
     ]);
 
+    $buttontest = new Modal("buttontest");
+    $buttontest->setFilename("buttontest");
+
     //if the return values are not interesting
     echo $m->getOpenButton("Open without return values");
 
-    echo $m->getModalContent();
+    // echo $m->getModalContent();
     ?>
 
     <button type="button" id="openFull">Open with return values</button>
+    <button type="button" id="btntest">Open buttontest</button>
+    <?php
+        echo Modal::getAllModals();
+    ?>
 </body>
 </html>
