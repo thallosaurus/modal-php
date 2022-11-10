@@ -4,7 +4,12 @@ namespace Donstrange\Modalsupport {
     use Twig\Loader\FilesystemLoader;
     use Twig\Environment;
 
+    const SHOW_SUBMIT = 0b001;
+    const SHOW_CLOSE = 0b010;
+    const SHOW_CLOSE_X = 0b100;
+
     class Modal {
+
         
         /**
          * Holds all declared modals
@@ -45,6 +50,8 @@ namespace Donstrange\Modalsupport {
         /* TWIG END */
 
         private string $title = "Micromodal";
+
+        private int $visibleFlags = SHOW_SUBMIT | SHOW_CLOSE | SHOW_CLOSE_X;
 
         // private string $modalArtifactName;
         
@@ -121,6 +128,10 @@ namespace Donstrange\Modalsupport {
         public function setTitle(string $title) {
             $this->title = $title;
         }
+
+        public function setVisibleFlags($flags) {
+            $this->visibleFlags = $flags;
+        }
         
         /**
          * Returns the HTML for the whole modal
@@ -147,14 +158,14 @@ namespace Donstrange\Modalsupport {
                 '<h2 class="modal__title" id="' . $this->modalId . '-title">',
                 $this->title,
                 '</h2>',
-                '<button class="modal__close" aria-label="Close modal" data-modal-ignore data-micromodal-close></button>',
+                (($this->visibleFlags & SHOW_CLOSE_X) == SHOW_CLOSE_X) ? '<button class="modal__close" aria-label="Close modal" data-modal-ignore data-micromodal-close></button>' : '',
                 '</header>',
                 '<main class="modal__content" id="' . $this->modalId . '-content">',
                 $content,
                 '</main>',
                 '<footer class="modal__footer">',
-                '<input class="modal__btn modal__btn-primary" data-ok type="submit">',
-                '<button class="modal__btn" data-micromodal-close data-cancel data-modal-ignore aria-label="Close this dialog window">Close</button>',
+                (($this->visibleFlags & SHOW_SUBMIT) == SHOW_SUBMIT) ? '<input class="modal__btn modal__btn-primary" data-ok type="submit">' : '',
+                (($this->visibleFlags & SHOW_CLOSE) == SHOW_CLOSE) ? '<button class="modal__btn" data-micromodal-close data-cancel data-modal-ignore aria-label="Close this dialog window">Close</button>' : '',
                 '</footer>',
                 '</form>',
                 '</div>',

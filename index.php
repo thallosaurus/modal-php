@@ -2,6 +2,9 @@
 require 'vendor/autoload.php';
 
 use Donstrange\Modalsupport\Modal;
+
+use const Donstrange\Modalsupport\SHOW_CLOSE_X;
+
 ?>
 
 <!DOCTYPE html>
@@ -50,6 +53,7 @@ use Donstrange\Modalsupport\Modal;
 
     $buttontest = new Modal("buttontest");
     $buttontest->setFilename("buttontest");
+    $buttontest->setVisibleFlags(SHOW_CLOSE_X);
 
     //if the return values are not interesting
     echo $m->getOpenButton("Open without return values");
