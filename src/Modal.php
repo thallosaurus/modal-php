@@ -54,7 +54,7 @@ namespace Donstrange\Modalsupport {
         function __construct(string $id, ?string $content = null) {
             parent::__construct();
             $this->modalId = $id;
-            // $this->content = $content;
+            $this->content = $content;
 
             //default
             // $this->modalFilename = $this->modalId;
@@ -126,14 +126,14 @@ namespace Donstrange\Modalsupport {
          */
         public function getModalContent(): string {
             // $content = "";
-            // if (is_null($this->content)) {
+            if (is_null($this->content)) {
 
                 // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
 
-                $content = $this->readTemplate($this->modalFilename, $this->templateData);
-            // } else {
-                // $content = $this->content;
-            // }
+                // $content = $this->readTemplate($this->modalFilename, $this->templateData);
+            } else {
+                $content = $this->content;
+            }
 
             $modalRaw = [
                 '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
