@@ -99,8 +99,9 @@ namespace Donstrange\Modalsupport {
         public static function getAssets(): string {
             $jsData = file_get_contents(__DIR__ . "/../assets/micromodal.js");
             $cssData = file_get_contents(__DIR__ . "/../assets/micromodal.css");
+            $tabCss = file_get_contents(__DIR__ . "/../assets/tabs.css");
             $init = file_get_contents(__DIR__ . "/../assets/init.js");
-            return "<style>" . $cssData . "</style>" . "<script>" . $jsData . $init . "</script>";
+            return "<style>" . $cssData . $tabCss . "</style>" . "<script>" . $jsData . $init . "</script>";
         }
 
         public static function getAllModals(): string {
@@ -133,6 +134,11 @@ namespace Donstrange\Modalsupport {
             $this->visibleFlags = $flags;
         }
         
+        public function addTabView(TabView $view) {
+            $view->setRef($this);
+            $this->content = $view;
+        }
+
         /**
          * Returns the HTML for the whole modal
          *
@@ -144,7 +150,7 @@ namespace Donstrange\Modalsupport {
 
                 // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
 
-                $content = self::$twig->render($this->modalFilename . ".html", $this->templateData);
+                $content = $this->readTemplate($this->modalFilename);
             } else {
                 $content = $this->content;
             }
@@ -174,6 +180,10 @@ namespace Donstrange\Modalsupport {
             ];
 
             return join("", $modalRaw);
+        }
+
+        public function readTemplate($mfilename): string {
+            return self::$twig->render($mfilename . ".html", $this->templateData);
         }
     }
 }

@@ -2,6 +2,7 @@
 require 'vendor/autoload.php';
 
 use Donstrange\Modalsupport\Modal;
+use Donstrange\Modalsupport\TabView;
 
 use const Donstrange\Modalsupport\SHOW_CLOSE_X;
 
@@ -28,6 +29,18 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
                 })
             });
 
+            document.querySelector("#openRadio")
+            .addEventListener("click", (e) => {
+                openModalById("radio-test")
+                .then(data => {
+                    console.log(data);
+                    // alert(`Deine Lieblingsfrüchte sind ${data.fruit}`);
+                })
+                .catch(() => {
+                    console.log("Dialog was cancelled");
+                })
+            })
+
             document.querySelector("#btntest")
             .addEventListener("click", (e) => {
                 openModalById("buttontest")
@@ -41,7 +54,7 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
 
 <body>
     <?php
-    $content = "<label for='prename'>Vorname<label><input name='prename'><br><label for='surname'>Nachname</label><input name='surname'>";
+    // $content = "<label for='prename'>Vorname<label><input name='prename'><br><label for='surname'>Nachname</label><input name='surname'>";
     $m = new Modal("checkboxes-test");
     $m->setData([
         "fruits" => [
@@ -59,10 +72,20 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
     echo $m->getOpenButton("Open without return values");
 
     // echo $m->getModalContent();
+
+    $tabview = new TabView();
+    $tabview->addTemplate("Hello", "modal-1", true);
+    $tabview->addTemplate("Hello1", "buttontest");
+    $tabview->addTemplate("Hello2", "checkboxes-test");
+
+    $radiotest = new Modal("radio-test");
+    $radiotest->addTabView($tabview);
+    // $radiotest->setFilename("radio-test");
     ?>
 
     <button type="button" id="openFull">Open with return values</button>
     <button type="button" id="btntest">Open buttontest</button>
+    <button type="button" id="openRadio">Open radiotest</button>
     <?php
         echo Modal::getAllModals();
     ?>

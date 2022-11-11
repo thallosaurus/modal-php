@@ -34,10 +34,16 @@ function createOptions(res = null, rej = null) {
         event.preventDefault();
 
         //data-micromodal-close does interfere with the submit listener. so we close it manually
-        MicroModal.close(modal.id);
-
-        res && res(createObjectFromForm(event.target));
-        form.reset();
+        let data = createObjectFromForm(event.target);
+        if (event.target.dataset.action =! "no-submit") {
+          res && res(data);
+          MicroModal.close(modal.id);
+          form.reset();
+        } else {
+          // MicroModal.emit('submit', data);
+          // Streams
+          console.log("Stream submit", data);
+        }
       }, {
         signal: abortController.signal
       });
@@ -95,6 +101,8 @@ function createOptions(res = null, rej = null) {
 
 window.addEventListener("load", () => {
   MicroModal.init(createOptions());
+  MicroModal.prototype = EventTarget;
+
   //console.debug("Micromodal init");
 });
 
