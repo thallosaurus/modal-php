@@ -29,7 +29,7 @@ namespace Donstrange\Modalsupport {
                 $this->ref->readTemplate($data["templatename"]),
                 // $data["content"],
                 '</div>',
-                '</div>'
+                '</div>',
             ]);
         }
 

@@ -53,6 +53,8 @@ namespace Donstrange\Modalsupport {
 
         private int $visibleFlags = SHOW_SUBMIT | SHOW_CLOSE | SHOW_CLOSE_X;
 
+        private bool $hasTabs = false;
+
         // private string $modalArtifactName;
         
         /**
@@ -137,6 +139,7 @@ namespace Donstrange\Modalsupport {
         public function addTabView(TabView $view) {
             $view->setRef($this);
             $this->content = $view;
+            $this->hasTabs = true;
         }
 
         /**
@@ -159,7 +162,7 @@ namespace Donstrange\Modalsupport {
                 '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
                 '<div class="modal__overlay" tabindex="-1" data-micromodal-close>',
                 '<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="' . $this->modalId . '-title">',
-                '<form action="#">',
+                '<form action="#"' . ($this->hasTabs ? " data-has-tabs" : "") . '>',
                 '<header class="modal__header">',
                 '<h2 class="modal__title" id="' . $this->modalId . '-title">',
                 $this->title,

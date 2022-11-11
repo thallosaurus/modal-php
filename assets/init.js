@@ -14,7 +14,7 @@ function createOptions(res = null, rej = null) {
       let abortController = new AbortController();
 
       modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
-        
+
         btn.addEventListener("click", (btnevent) => {
           btnevent.preventDefault();
           // console.log(btnevent.target.dataset.action);
@@ -35,7 +35,7 @@ function createOptions(res = null, rej = null) {
 
         //data-micromodal-close does interfere with the submit listener. so we close it manually
         let data = createObjectFromForm(event.target);
-        if (event.target.dataset.action =! "no-submit") {
+        if (event.target.dataset.action = ! "no-submit") {
           res && res(data);
           MicroModal.close(modal.id);
           form.reset();
@@ -52,20 +52,20 @@ function createOptions(res = null, rej = null) {
         switch (e.key) {
           //User used enter to submit form. Close Window and resolve with object
           case "Enter":
-              e.preventDefault();
-              //alert("Key down")
-              res && res(createObjectFromForm(form));
-              form.reset();
-              MicroModal.close(modal.id);
-              break;
-          
-            //escape was pressed, close window and reject
-            case "Escape":
-              e.preventDefault();
-              rej && rej();
-              form.reset();
-              MicroModal.close(modal.id);
-              break;
+            e.preventDefault();
+            //alert("Key down")
+            res && res(createObjectFromForm(form));
+            form.reset();
+            MicroModal.close(modal.id);
+            break;
+
+          //escape was pressed, close window and reject
+          case "Escape":
+            e.preventDefault();
+            rej && rej();
+            form.reset();
+            MicroModal.close(modal.id);
+            break;
 
           //return false;
         }
@@ -82,8 +82,8 @@ function createOptions(res = null, rej = null) {
           form.reset();
           rej && rej();
         });
-        }, {
-          signal: abortController.signal
+      }, {
+        signal: abortController.signal
       });
 
       abortSignals.set(modal.id, abortController);
@@ -117,9 +117,15 @@ function createObjectFromForm(form) {
     event: "submit"
   };
 
+  if (Object.keys(form.dataset).includes("hasTabs")) {
+    form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input");
+    // console.log(form);
+    // debugger;
+  }
+
   for (let t of form) {
     if (Boolean(t.name) && !(Object.keys(t.dataset).includes("modalIgnore"))) {
-      console.log(t);
+      // console.log(t);
 
       let value;
 
@@ -133,6 +139,7 @@ function createObjectFromForm(form) {
 
       o[key] = value;
     }
+
   }
 
   return o;
