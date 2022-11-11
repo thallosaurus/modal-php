@@ -38,4 +38,5 @@ input[type="radio"]:checked ~ label {
     width: -webkit-fill-available;
     left: 0;
     padding: 10px;
+    overflow-x: scroll;
 }

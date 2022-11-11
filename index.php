@@ -88,6 +88,9 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
         ]
     ]);
     // $radiotest->setFilename("radio-test");
+
+    $dbg = new Modal("test", "test");
+    echo $dbg->getOpenButton("Test me");
     ?>
 
     <button type="button" id="openFull">Open with return values</button>
