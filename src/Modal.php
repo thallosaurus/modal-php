@@ -54,10 +54,10 @@ namespace Donstrange\Modalsupport {
         function __construct(string $id, ?string $content = null) {
             parent::__construct();
             $this->modalId = $id;
-            $this->content = $content;
+            // $this->content = $content;
 
             //default
-            $this->modalFilename = $this->modalId;
+            // $this->modalFilename = $this->modalId;
 
             // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
