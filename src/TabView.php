@@ -1,7 +1,7 @@
 <?php
 
 namespace Donstrange\Modalsupport {
-    class TabView
+    class TabView extends TemplateLoader
     {
         private array $tabs = [];
         private ?Modal $ref = null;
@@ -15,7 +15,7 @@ namespace Donstrange\Modalsupport {
             ];
         }
 
-        private function getTabRendered($index): string
+        private function getTabRendered($index, $data): string
         {
             $data = $this->tabs[$index];
             $checked = $data["checked"] ? " checked" : "";
@@ -26,7 +26,7 @@ namespace Donstrange\Modalsupport {
                 '<label for="tab'. $index . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
                 // Hallo Welt 2
-                $this->ref->readTemplate($data["templatename"]),
+                $this->readTemplate($data["templatename"], $data),
                 // $data["content"],
                 '</div>',
                 '</div>',
@@ -34,24 +34,24 @@ namespace Donstrange\Modalsupport {
         }
 
         public function setRef(Modal $modal) {
-            $this->ref = $modal;
+            // $this->ref = $modal;
         }
 
-        private function getAllTabsRendered(): string {
+        private function getAllTabsRendered($data): string {
             $str = "";
 
             for ($i = 0; $i < sizeof($this->tabs); $i++) {
-                $str .= $this->getTabRendered($i);
+                $str .= $this->getTabRendered($i, $data);
             }
 
             return $str;
         }
 
-        public function __toString()
+        public function render(array $data)
         {            
             return join("", [
                 '<div class="tab-view">',
-                $this->getAllTabsRendered(),
+                $this->getAllTabsRendered($data),
                 '</div>'
             ]);
         }

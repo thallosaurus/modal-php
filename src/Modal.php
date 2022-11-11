@@ -1,14 +1,13 @@
 <?php
 namespace Donstrange\Modalsupport {
 
-    use Twig\Loader\FilesystemLoader;
-    use Twig\Environment;
+
 
     const SHOW_SUBMIT = 0b001;
     const SHOW_CLOSE = 0b010;
     const SHOW_CLOSE_X = 0b100;
 
-    class Modal {
+    class Modal extends TemplateLoader {
 
         
         /**
@@ -34,20 +33,9 @@ namespace Donstrange\Modalsupport {
          *
          * @var string
          */
-        private ?string $content;
+        private $content;
 
-        /**
-         * Path where all modal artifacts should be loaded from
-         */
-        private static string $modalArtifactsPath = __DIR__ . "/../example";
-
-        /* TWIG */
-
-        private static $fsLoader = null;
-        private static $twig = null;
         private $templateData = [];
-
-        /* TWIG END */
 
         private string $title = "Micromodal";
 
@@ -64,17 +52,12 @@ namespace Donstrange\Modalsupport {
          * @param string $content Modal content, must be form elements without form parent element
          */
         function __construct(string $id, ?string $content = null) {
+            parent::__construct();
             $this->modalId = $id;
             $this->content = $content;
 
             //default
             $this->modalFilename = $this->modalId;
-
-            //TWIG
-            if (self::$fsLoader == null) {
-                self::$fsLoader = new FilesystemLoader(self::$modalArtifactsPath);
-                self::$twig = new Environment(self::$fsLoader);
-            }
 
             // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
@@ -114,12 +97,6 @@ namespace Donstrange\Modalsupport {
             return join("", $map);
         }
 
-        public static function setModalPath($path) {
-            self::$modalArtifactsPath = $path;
-            self::$fsLoader = new FilesystemLoader($path);
-            self::$twig = new Environment(self::$fsLoader);
-        }
-
         public function setFilename(string $fname) {
             $this->modalFilename = $fname;
         }
@@ -137,7 +114,7 @@ namespace Donstrange\Modalsupport {
         }
         
         public function addTabView(TabView $view) {
-            $view->setRef($this);
+            // $view->setRef($this);
             $this->content = $view;
             $this->hasTabs = true;
         }
@@ -148,15 +125,15 @@ namespace Donstrange\Modalsupport {
          * @return string
          */
         public function getModalContent(): string {
-            $content = "";
-            if (is_null($this->content)) {
+            // $content = "";
+            // if (is_null($this->content)) {
 
                 // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
 
-                $content = $this->readTemplate($this->modalFilename);
-            } else {
-                $content = $this->content;
-            }
+                $content = $this->readTemplate($this->modalFilename, $this->templateData);
+            // } else {
+                // $content = $this->content;
+            // }
 
             $modalRaw = [
                 '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
@@ -185,9 +162,7 @@ namespace Donstrange\Modalsupport {
             return join("", $modalRaw);
         }
 
-        public function readTemplate($mfilename): string {
-            return self::$twig->render($mfilename . ".html", $this->templateData);
-        }
+
     }
 }
 ?>

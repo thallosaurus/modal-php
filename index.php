@@ -80,6 +80,13 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
 
     $radiotest = new Modal("radio-test");
     $radiotest->addTabView($tabview);
+    $radiotest->setData([
+        "fruits" => [
+            "Äpfel",
+            "Birnen",
+            "Erdbeeren"
+        ]
+    ]);
     // $radiotest->setFilename("radio-test");
     ?>
 

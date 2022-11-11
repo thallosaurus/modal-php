@@ -35,15 +35,16 @@ function createOptions(res = null, rej = null) {
 
         //data-micromodal-close does interfere with the submit listener. so we close it manually
         let data = createObjectFromForm(event.target);
-        if (event.target.dataset.action = ! "no-submit") {
+        // debugger;
+        // if (event.target.dataset.action =! "no-submit") {
           res && res(data);
           MicroModal.close(modal.id);
           form.reset();
-        } else {
+        // } else {
           // MicroModal.emit('submit', data);
           // Streams
-          console.log("Stream submit", data);
-        }
+          // console.log("Stream submit", data);
+        // }
       }, {
         signal: abortController.signal
       });
@@ -55,8 +56,8 @@ function createOptions(res = null, rej = null) {
             e.preventDefault();
             //alert("Key down")
             res && res(createObjectFromForm(form));
-            form.reset();
             MicroModal.close(modal.id);
+            form.reset();
             break;
 
           //escape was pressed, close window and reject
@@ -87,12 +88,16 @@ function createOptions(res = null, rej = null) {
       });
 
       abortSignals.set(modal.id, abortController);
+      console.log(abortSignals);
     },
     onClose: (modal) => {
       //alert(`${modal.id} got hidden, ${trigger.id} was the trigger`);
       //alert("Closing modal");
-
+      
       //remove all remaining listeners here
+      console.log(modal);
+      console.log(abortSignals);
+      // debugger;
       abortSignals.get(modal.id).abort();
       abortSignals.delete(modal.id);
     }
@@ -117,7 +122,10 @@ function createObjectFromForm(form) {
     event: "submit"
   };
 
+  let currentTab = null;
+
   if (Object.keys(form.dataset).includes("hasTabs")) {
+    currentTab = form.querySelector(".w-tab input[type='radio']:checked").id;
     form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input");
     // console.log(form);
     // debugger;
@@ -141,6 +149,11 @@ function createObjectFromForm(form) {
     }
 
   }
+
+  o = {
+    currentTab: currentTab,
+    ...o,
+  };
 
   return o;
 }
