@@ -1,7 +1,8 @@
 <?php
 namespace Donstrange\Modalsupport {
 
-
+    use Twig\Environment;
+    use Twig\Loader\ArrayLoader;
 
     const SHOW_SUBMIT = 0b001;
     const SHOW_CLOSE = 0b010;
@@ -24,7 +25,7 @@ namespace Donstrange\Modalsupport {
          */
         private string $modalId;
 
-        private string $modalFilename;
+        private ?string $modalFilename;
 
         private $data = [];
 
@@ -42,6 +43,7 @@ namespace Donstrange\Modalsupport {
         private int $visibleFlags = SHOW_SUBMIT | SHOW_CLOSE | SHOW_CLOSE_X;
 
         private bool $hasTabs = false;
+        private TabView $tabView;
 
         // private string $modalArtifactName;
         
@@ -51,10 +53,10 @@ namespace Donstrange\Modalsupport {
          * @param string $id The id of the modal
          * @param string $content Modal content, must be form elements without form parent element
          */
-        function __construct(string $id, ?string $content = null) {
-            parent::__construct();
+        function __construct(string $id, ?string $filename = null) {
+            // parent::__construct();
             $this->modalId = $id;
-            $this->content = $content;
+            $this->modalFilename = $filename;
 
             //default
             // $this->modalFilename = $this->modalId;
@@ -68,6 +70,7 @@ namespace Donstrange\Modalsupport {
          *
          * @param string $label
          * @param array $classList
+         * @deprecated
          * @return string
          */
         public function getOpenButton(string $label, $classList = []): string {
@@ -91,7 +94,7 @@ namespace Donstrange\Modalsupport {
 
         public static function getAllModals(): string {
             $map = array_map(function ($m) {
-                return $m->getModalContent();
+                return $m->render();
             }, self::$modals);
 
             return join("", $map);
@@ -115,7 +118,7 @@ namespace Donstrange\Modalsupport {
         
         public function addTabView(TabView $view) {
             // $view->setRef($this);
-            $this->content = $view;
+            $this->tabView = $view;
             $this->hasTabs = true;
         }
 
@@ -125,14 +128,16 @@ namespace Donstrange\Modalsupport {
          * @return string
          */
         public function getModalContent(): string {
-            // $content = "";
-            if (is_null($this->content)) {
-
+            $content = "";
+            if ($this->hasTabs) {
+                $content = $this->tabView->render();
+                // print_r($content);
                 // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
 
                 // $content = $this->readTemplate($this->modalFilename, $this->templateData);
             } else {
-                $content = $this->content;
+                // var_dump($this->content);
+                $content = $this->readTemplate($this->modalFilename);
             }
 
             $modalRaw = [
@@ -162,7 +167,12 @@ namespace Donstrange\Modalsupport {
             return join("", $modalRaw);
         }
 
+        public function render(): string {
+            $loader = new ArrayLoader([ "tmp" => $this->getModalContent() ]);
+            $twig = new Environment($loader);
 
+            return $twig->render("tmp", $this->templateData);
+        }
     }
 }
 ?>

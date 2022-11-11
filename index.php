@@ -55,7 +55,7 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
 <body>
     <?php
     // $content = "<label for='prename'>Vorname<label><input name='prename'><br><label for='surname'>Nachname</label><input name='surname'>";
-    $m = new Modal("checkboxes-test");
+    $m = new Modal("checkboxes-test", "checkboxes-test");
     $m->setData([
         "fruits" => [
             "Äpfel",
@@ -64,8 +64,8 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
         ]
     ]);
 
-    $buttontest = new Modal("buttontest");
-    $buttontest->setFilename("buttontest");
+    $buttontest = new Modal("buttontest", "buttontest");
+    // $buttontest->setFilename("buttontest");
     $buttontest->setVisibleFlags(SHOW_CLOSE_X);
 
     //if the return values are not interesting

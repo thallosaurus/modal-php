@@ -5,7 +5,7 @@ namespace Donstrange\Modalsupport {
     use Twig\Loader\FilesystemLoader;
     use Twig\Environment;
 
-    class TemplateLoader
+    abstract class TemplateLoader
     {
         /**
          * Path where all modal artifacts should be loaded from
@@ -22,21 +22,23 @@ namespace Donstrange\Modalsupport {
         function __construct()
         {
             //TWIG
-            if (self::$fsLoader == null) {
+            /*if (self::$fsLoader == null) {
                 self::$fsLoader = new FilesystemLoader(self::$modalArtifactsPath);
                 self::$twig = new Environment(self::$fsLoader);
-            }
+            }*/
         }
 
         public static function setModalPath($path)
         {
             self::$modalArtifactsPath = $path;
-            self::$fsLoader = new FilesystemLoader($path);
-            self::$twig = new Environment(self::$fsLoader);
         }
 
-        public function readTemplate($mfilename, $data): string {
-            return self::$twig->render($mfilename . ".html", $data);
+        public function readTemplate($mfilename): string {
+            // return self::$twig->render($mfilename . ".html", $data);
+            return file_get_contents(self::$modalArtifactsPath . "/" . $mfilename . ".html");
         }
+
+        public abstract function render(): string;
+
     }
 }

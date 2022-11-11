@@ -15,7 +15,7 @@ namespace Donstrange\Modalsupport {
             ];
         }
 
-        private function getTabRendered($index, $data): string
+        private function getTabRendered($index): string
         {
             $data = $this->tabs[$index];
             $checked = $data["checked"] ? " checked" : "";
@@ -25,8 +25,8 @@ namespace Donstrange\Modalsupport {
                 '<input type="radio" name="tab" data-modal-ignore id="tab' . $index . '"' . $checked . '>',
                 '<label for="tab'. $index . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
-                // Hallo Welt 2
-                $this->readTemplate($data["templatename"], $data),
+                // "Hallo Welt 2",
+                $this->readTemplate($data["templatename"]),
                 // $data["content"],
                 '</div>',
                 '</div>',
@@ -37,21 +37,21 @@ namespace Donstrange\Modalsupport {
             // $this->ref = $modal;
         }
 
-        private function getAllTabsRendered($data): string {
+        private function getAllTabsRendered(): string {
             $str = "";
 
             for ($i = 0; $i < sizeof($this->tabs); $i++) {
-                $str .= $this->getTabRendered($i, $data);
+                $str .= $this->getTabRendered($i);
             }
 
             return $str;
         }
 
-        public function render(array $data)
+        public function render(): string
         {            
             return join("", [
                 '<div class="tab-view">',
-                $this->getAllTabsRendered($data),
+                $this->getAllTabsRendered(),
                 '</div>'
             ]);
         }
