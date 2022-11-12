@@ -33,9 +33,20 @@ namespace Donstrange\Modalsupport {
             self::$modalArtifactsPath = $path;
         }
 
+        static $templateCache = [];
+
         public function readTemplate($mfilename): string {
             // return self::$twig->render($mfilename . ".html", $data);
-            return file_get_contents(self::$modalArtifactsPath . "/" . $mfilename . ".html");
+            $path = self::$modalArtifactsPath . "/" . $mfilename . ".html";
+            if (isset(self::$templateCache[$path])) {
+                return self::$templateCache[$path];
+                
+            } else {
+                $file = file_get_contents($path);
+                
+                self::$templateCache[$path] = $file;
+                return self::$templateCache[$path];
+            }
         }
 
         public abstract function render(): string;
