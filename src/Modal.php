@@ -93,9 +93,16 @@ namespace Donstrange\Modalsupport {
         }
 
         public static function getAllModals($debug = false) {
-            $map = array_map(function ($m) {
-                return [
-                    "template" => $m->render(),
+            if (!$debug) {
+                $map = array_map(function ($m) {
+                    return $m->render();
+                }, self::$modals);
+                return join("", $map);
+            } else {
+
+                $map = array_map(function ($m) {
+                    return [
+                        "template" => $m->render(),
                     "data" => $m->templateData
                 ];
             }, self::$modals);
@@ -117,14 +124,15 @@ namespace Donstrange\Modalsupport {
                 var_dump(htmlentities($masterTemplate));
             }
             
-
+            
             $loader = new ArrayLoader([ "tmp" => $masterTemplate ]);
             $twig = new Environment($loader);
-
+            
             //return $masterTemplate;
             return $twig->render("tmp", $masterData);
             //return $this->getModalContent();
-
+        }
+            
             //return join("", $map);
         }
 
@@ -196,11 +204,11 @@ namespace Donstrange\Modalsupport {
         }
 
         public function render(): string {
-            //$loader = new ArrayLoader([ "tmp" => $this->getModalContent() ]);
-            //$twig = new Environment($loader);
+            $loader = new ArrayLoader([ "tmp" => $this->getModalContent() ]);
+            $twig = new Environment($loader);
 
-            //return $twig->render("tmp", $this->templateData);
-                return $this->getModalContent();
+            return $twig->render("tmp", $this->templateData);
+                //return $this->getModalContent();
         }
     }
 }
