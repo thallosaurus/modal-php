@@ -36,7 +36,7 @@ namespace Donstrange\Modalsupport {
          */
         private $content;
 
-        private $templateData = [];
+        public $templateData = [];
 
         private string $title = "Micromodal";
 
@@ -92,12 +92,40 @@ namespace Donstrange\Modalsupport {
             return "<style>" . $cssData . $tabCss . "</style>" . "<script>" . $jsData . $init . "</script>";
         }
 
-        public static function getAllModals(): string {
+        public static function getAllModals($debug = false) {
             $map = array_map(function ($m) {
-                return $m->render();
+                return [
+                    "template" => $m->render(),
+                    "data" => $m->templateData
+                ];
             }, self::$modals);
+            
+            //prepare master template here
+            $masterTemplate = join("<br>", array_map(function ($e) {
+                return $e["template"];
+            },
+            $map));
+            
+            
+            $masterData = [];
+            
+            foreach ($map as $data) {
+                $masterData = array_merge($masterData, $data["data"]);
+            }
+            if ($debug) {
+                var_dump($masterData);
+                var_dump(htmlentities($masterTemplate));
+            }
+            
 
-            return join("", $map);
+            $loader = new ArrayLoader([ "tmp" => $masterTemplate ]);
+            $twig = new Environment($loader);
+
+            //return $masterTemplate;
+            return $twig->render("tmp", $masterData);
+            //return $this->getModalContent();
+
+            //return join("", $map);
         }
 
         public function setFilename(string $fname) {
@@ -168,10 +196,11 @@ namespace Donstrange\Modalsupport {
         }
 
         public function render(): string {
-            $loader = new ArrayLoader([ "tmp" => $this->getModalContent() ]);
-            $twig = new Environment($loader);
+            //$loader = new ArrayLoader([ "tmp" => $this->getModalContent() ]);
+            //$twig = new Environment($loader);
 
-            return $twig->render("tmp", $this->templateData);
+            //return $twig->render("tmp", $this->templateData);
+                return $this->getModalContent();
         }
     }
 }
