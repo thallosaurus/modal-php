@@ -12,6 +12,7 @@ function createOptions(res = null, rej = null) {
     onShow: modal => {
       //is used to remove all event listeners at once after close
       let abortController = new AbortController();
+      let form = modal.querySelector("form");
 
       modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
 
@@ -21,14 +22,16 @@ function createOptions(res = null, rej = null) {
           MicroModal.close(modal.id);
           res({
             event: "button",
-            action: btnevent.target.dataset.action
+            action: btnevent.target.dataset.action,
+            ...createObjectFromForm(form)
           });
         }, {
           signal: abortController.signal
         });
-      })
+        
+        // let data = createObjectFromForm(form);
+      });
 
-      let form = modal.querySelector("form");
       //console.log(form);
       form.addEventListener("submit", (event) => {
         event.preventDefault();

@@ -1,4 +1,5 @@
 <?php
+
 namespace Donstrange\Modalsupport {
 
     use Twig\Environment;
@@ -8,16 +9,17 @@ namespace Donstrange\Modalsupport {
     const SHOW_CLOSE = 0b010;
     const SHOW_CLOSE_X = 0b100;
 
-    class Modal extends TemplateLoader {
+    class Modal extends TemplateLoader
+    {
 
-        
+
         /**
          * Holds all declared modals
          *
          * @var array
          */
         private static $modals = [];
-        
+
         /**
          * The ID of the modal
          *
@@ -46,14 +48,15 @@ namespace Donstrange\Modalsupport {
         private TabView $tabView;
 
         // private string $modalArtifactName;
-        
+
         /**
          * Constructor of the class
          *
          * @param string $id The id of the modal
          * @param string $content Modal content, must be form elements without form parent element
          */
-        function __construct(string $id, ?string $filename = null) {
+        function __construct(string $id, ?string $filename = null)
+        {
             // parent::__construct();
             $this->modalId = $id;
             $this->modalFilename = $filename;
@@ -64,7 +67,7 @@ namespace Donstrange\Modalsupport {
             // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
         }
-        
+
         /**
          * Returns a button to open the modal without object support
          *
@@ -73,18 +76,20 @@ namespace Donstrange\Modalsupport {
          * @deprecated
          * @return string
          */
-        public function getOpenButton(string $label, $classList = []): string {
+        public function getOpenButton(string $label, $classList = []): string
+        {
             $classstring = join(" ", $classList);
-            
-            return "<button type='button' class='" . $classstring . "' data-micromodal-trigger='". $this->modalId ."'>" . $label . "</button>";
+
+            return "<button type='button' class='" . $classstring . "' data-micromodal-trigger='" . $this->modalId . "'>" . $label . "</button>";
         }
-        
+
         /**
          * Loads all dependent files as script/style tag. Use this in <head>
          *
          * @return string
          */
-        public static function getAssets(): string {
+        public static function getAssets(): string
+        {
             $jsData = file_get_contents(__DIR__ . "/../assets/micromodal.js");
             $cssData = file_get_contents(__DIR__ . "/../assets/micromodal.css");
             $tabCss = file_get_contents(__DIR__ . "/../assets/tabs.css");
@@ -92,7 +97,8 @@ namespace Donstrange\Modalsupport {
             return "<style>" . $cssData . $tabCss . "</style>" . "<script>" . $jsData . $init . "</script>";
         }
 
-        public static function getAllModals($debug = false) {
+        public static function getAllModals($debug = false)
+        {
             if (!$debug) {
                 $map = array_map(function ($m) {
                     return $m->render();
@@ -103,56 +109,63 @@ namespace Donstrange\Modalsupport {
                 $map = array_map(function ($m) {
                     return [
                         "template" => $m->render(),
-                    "data" => $m->templateData
-                ];
-            }, self::$modals);
-            
-            //prepare master template here
-            $masterTemplate = join("<br>", array_map(function ($e) {
-                return $e["template"];
-            },
-            $map));
-            
-            
-            $masterData = [];
-            
-            foreach ($map as $data) {
-                $masterData = array_merge($masterData, $data["data"]);
+                        "data" => $m->templateData
+                    ];
+                }, self::$modals);
+
+                //prepare master template here
+                $masterTemplate = join("<br>", array_map(
+                    function ($e) {
+                        return $e["template"];
+                    },
+                    $map
+                ));
+
+
+                $masterData = [];
+
+                foreach ($map as $data) {
+                    $masterData = array_merge($masterData, $data["data"]);
+                }
+                if ($debug) {
+                    var_dump($masterData);
+                    var_dump(htmlentities($masterTemplate));
+                }
+
+
+                $loader = new ArrayLoader(["tmp" => $masterTemplate]);
+                $twig = new Environment($loader);
+
+                //return $masterTemplate;
+                return $twig->render("tmp", $masterData);
+                //return $this->getModalContent();
             }
-            if ($debug) {
-                var_dump($masterData);
-                var_dump(htmlentities($masterTemplate));
-            }
-            
-            
-            $loader = new ArrayLoader([ "tmp" => $masterTemplate ]);
-            $twig = new Environment($loader);
-            
-            //return $masterTemplate;
-            return $twig->render("tmp", $masterData);
-            //return $this->getModalContent();
-        }
-            
+
             //return join("", $map);
         }
 
-        public function setFilename(string $fname) {
+        public function setFilename(string $fname)
+        {
             $this->modalFilename = $fname;
         }
 
-        public function setData(array $data) {
+        public function setData(array $data)
+        {
             $this->templateData = $data;
         }
 
-        public function setTitle(string $title) {
+        public function setTitle(string $title)
+        {
             $this->title = $title;
         }
 
-        public function setVisibleFlags($flags) {
+        public function setVisibleFlags($flags)
+        {
             $this->visibleFlags = $flags;
         }
-        
-        public function addTabView(TabView $view) {
+
+        public function addTabView(TabView $view)
+        {
             // $view->setRef($this);
             $this->tabView = $view;
             $this->hasTabs = true;
@@ -163,7 +176,8 @@ namespace Donstrange\Modalsupport {
          *
          * @return string
          */
-        public function getModalContent(): string {
+        public function getModalContent(): string
+        {
             $content = "";
             if ($this->hasTabs) {
                 $content = $this->tabView->render();
@@ -203,13 +217,13 @@ namespace Donstrange\Modalsupport {
             return join("", $modalRaw);
         }
 
-        public function render(): string {
-            $loader = new ArrayLoader([ "tmp" => $this->getModalContent() ]);
+        public function render(): string
+        {
+            $loader = new ArrayLoader(["tmp" => $this->getModalContent()]);
             $twig = new Environment($loader);
 
             return $twig->render("tmp", $this->templateData);
-                //return $this->getModalContent();
+            //return $this->getModalContent();
         }
     }
 }
-?>
