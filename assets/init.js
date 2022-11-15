@@ -136,15 +136,31 @@ function createObjectFromForm(form) {
 
   for (let t of form) {
     if (Boolean(t.name) && !(Object.keys(t.dataset).includes("modalIgnore"))) {
-      // console.log(t);
-
+      
       let value;
+      
+      console.log(t);
+      // debugger;
 
-      if (t.type == "checkbox") {
+      switch (t.type) {
+        case "checkbox":
+          value = t.checked;
+          break;
+
+        case "select-one":
+          //console.log(t.selectedOptions);
+          value = t.selectedOptions[0].value;
+          break;
+
+        default:
+          value = t.value;
+      }
+
+/*       if (t.type == "checkbox") {
         value = t.checked;
       } else {
         value = t.value;
-      }
+      } */
 
       let key = Boolean(t.name) ? t.name : t.id;
 

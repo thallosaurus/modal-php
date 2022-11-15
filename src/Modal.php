@@ -144,6 +144,9 @@ namespace Donstrange\Modalsupport {
             //return join("", $map);
         }
 
+        /**
+         * @deprecated
+         */
         public function setFilename(string $fname)
         {
             $this->modalFilename = $fname;
