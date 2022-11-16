@@ -11,7 +11,7 @@
     display: block;
 }
 
-.w-tab input[type="radio"] {
+.w-tab > input[type="radio"] {
     display: none;
 }
 
