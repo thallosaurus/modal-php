@@ -47,6 +47,9 @@ namespace Donstrange\Modalsupport {
         private bool $hasTabs = false;
         private TabView $tabView;
 
+        private string $closeLabel = "Schließen";
+        private string $submitLabel = "Absenden";
+
         // private string $modalArtifactName;
 
         /**
@@ -208,8 +211,8 @@ namespace Donstrange\Modalsupport {
                 $content,
                 '</main>',
                 '<footer class="modal__footer">',
-                (($this->visibleFlags & SHOW_SUBMIT) == SHOW_SUBMIT) ? '<input class="modal__btn modal__btn-primary" data-ok type="submit">' : '',
-                (($this->visibleFlags & SHOW_CLOSE) == SHOW_CLOSE) ? '<button class="modal__btn" data-micromodal-close data-cancel data-modal-ignore aria-label="Close this dialog window">Close</button>' : '',
+                (($this->visibleFlags & SHOW_SUBMIT) == SHOW_SUBMIT) ? '<input class="modal__btn modal__btn-primary" data-ok type="submit" value="'.$this->submitLabel.'">' : '',
+                (($this->visibleFlags & SHOW_CLOSE) == SHOW_CLOSE) ? '<button class="modal__btn" data-micromodal-close data-cancel data-modal-ignore aria-label="Close this dialog window">'. $this->closeLabel .'</button>' : '',
                 '</footer>',
                 '</form>',
                 '</div>',
