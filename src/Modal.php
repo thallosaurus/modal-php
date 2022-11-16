@@ -86,6 +86,14 @@ namespace Donstrange\Modalsupport {
             return "<button type='button' class='" . $classstring . "' data-micromodal-trigger='" . $this->modalId . "'>" . $label . "</button>";
         }
 
+        public function setCloseLabel(string $label) {
+            $this->closeLabel = $label;
+        }
+
+        public function setSubmitLabel(string $label) {
+            $this->submitLabel = $label;
+        }
+
         /**
          * Loads all dependent files as script/style tag. Use this in <head>
          *
