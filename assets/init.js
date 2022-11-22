@@ -29,6 +29,8 @@ function createOptions(res = null, rej = null, eventCallback = null) {
         modal.querySelectorAll("button[data-modal-event]").forEach(btn => {
           btn.addEventListener("click", (btnevent) => {
             btnevent.preventDefault();
+
+            let eventName = btnevent.target.dataset.modalEvent ?? "data";
   
             evtarget.dispatchEvent(new CustomEvent("data", {
               detail: {
