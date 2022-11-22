@@ -7,18 +7,43 @@ let abortSignals = new Map();
  * @param {*} [rej=null] reject function of a Promise
  * @return {*} 
  */
-function createOptions(res = null, rej = null) {
+function createOptions(res = null, rej = null, eventCallback = null) {
   return {
     onShow: modal => {
       //is used to remove all event listeners at once after close
       let abortController = new AbortController();
       let form = modal.querySelector("form");
 
+      if (eventCallback) {
+
+        let evtarget = new EventTarget();
+        evtarget.addEventListener("data", (d) => {
+          console.log(d);
+        }, {
+          signal: abortController.signal
+        });
+
+        modal.querySelectorAll("button[data-modal-ignore]").forEach(btn => {
+          btn.addEventListener("click", (btnevent) => {
+            btnevent.preventDefault();
+  
+            evtarget.dispatchEvent(new CustomEvent("data", {
+              detail: {
+                event: btnevent.target.dataset.action,
+                ...createObjectFromForm(form)
+              }
+            }));
+  
+          }, {
+            signal: abortController.signal
+          });
+        })
+      }
+
       modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
 
         btn.addEventListener("click", (btnevent) => {
           btnevent.preventDefault();
-          // console.log(btnevent.target.dataset.action);
           MicroModal.close(modal.id);
           res({
             event: "button",
@@ -28,26 +53,15 @@ function createOptions(res = null, rej = null) {
         }, {
           signal: abortController.signal
         });
-        
-        // let data = createObjectFromForm(form);
+
       });
 
-      //console.log(form);
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-
-        //data-micromodal-close does interfere with the submit listener. so we close it manually
         let data = createObjectFromForm(event.target);
-        // debugger;
-        // if (event.target.dataset.action =! "no-submit") {
-          res && res(data);
-          MicroModal.close(modal.id);
-          form.reset();
-        // } else {
-          // MicroModal.emit('submit', data);
-          // Streams
-          // console.log("Stream submit", data);
-        // }
+        res && res(data);
+        MicroModal.close(modal.id);
+        form.reset();
       }, {
         signal: abortController.signal
       });
@@ -57,7 +71,6 @@ function createOptions(res = null, rej = null) {
           //User used enter to submit form. Close Window and resolve with object
           case "Enter":
             e.preventDefault();
-            //alert("Key down")
             res && res(createObjectFromForm(form));
             MicroModal.close(modal.id);
             form.reset();
@@ -70,8 +83,6 @@ function createOptions(res = null, rej = null) {
             form.reset();
             MicroModal.close(modal.id);
             break;
-
-          //return false;
         }
       }, {
         capture: false,
@@ -80,9 +91,7 @@ function createOptions(res = null, rej = null) {
 
       let closeBtns = modal.querySelectorAll("[data-cancel]");
       closeBtns.forEach(btn => {
-        //console.log(btn);
         btn.addEventListener("click", (e) => {
-          //console.log("close", e);
           form.reset();
           rej && rej();
         });
@@ -94,13 +103,10 @@ function createOptions(res = null, rej = null) {
       console.log(abortSignals);
     },
     onClose: (modal) => {
-      //alert(`${modal.id} got hidden, ${trigger.id} was the trigger`);
-      //alert("Closing modal");
-      
+
       //remove all remaining listeners here
       console.log(modal);
       console.log(abortSignals);
-      // debugger;
       abortSignals.get(modal.id).abort();
       abortSignals.delete(modal.id);
     }
@@ -109,9 +115,6 @@ function createOptions(res = null, rej = null) {
 
 window.addEventListener("load", () => {
   MicroModal.init(createOptions());
-  MicroModal.prototype = EventTarget;
-
-  //console.debug("Micromodal init");
 });
 
 /**
@@ -130,17 +133,14 @@ function createObjectFromForm(form) {
   if (Object.keys(form.dataset).includes("hasTabs")) {
     currentTab = form.querySelector(".w-tab input[type='radio']:checked").id;
     form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input");
-    // console.log(form);
-    // debugger;
   }
 
   for (let t of form) {
     if (Boolean(t.name) && !(Object.keys(t.dataset).includes("modalIgnore"))) {
-      
+
       let value;
-      
+
       console.log(t);
-      // debugger;
 
       switch (t.type) {
         case "checkbox":
@@ -148,19 +148,12 @@ function createObjectFromForm(form) {
           break;
 
         case "select-one":
-          //console.log(t.selectedOptions);
           value = t.selectedOptions[0].value;
           break;
 
         default:
           value = t.value;
       }
-
-/*       if (t.type == "checkbox") {
-        value = t.checked;
-      } else {
-        value = t.value;
-      } */
 
       let key = Boolean(t.name) ? t.name : t.id;
 
@@ -183,9 +176,9 @@ function createObjectFromForm(form) {
  * @param {string} id
  * @return {Promise<Object>} 
  */
-function openModalById(id) {
+function openModalById(id, eventCallback = null) {
   return new Promise((res, rej) => {
-    let options = createOptions(res, rej);
+    let options = createOptions(res, rej, eventCallback);
     MicroModal.show(id, options);
   });
 }
