@@ -100,13 +100,13 @@ function createOptions(res = null, rej = null, eventCallback = null) {
       });
 
       abortSignals.set(modal.id, abortController);
-      console.log(abortSignals);
+      //console.log(abortSignals);
     },
     onClose: (modal) => {
 
       //remove all remaining listeners here
-      console.log(modal);
-      console.log(abortSignals);
+      //console.log(modal);
+      //console.log(abortSignals);
       abortSignals.get(modal.id).abort();
       abortSignals.delete(modal.id);
     }
@@ -140,7 +140,7 @@ function createObjectFromForm(form) {
 
       let value;
 
-      console.log(t);
+      // console.log(t);
 
       switch (t.type) {
         case "checkbox":
