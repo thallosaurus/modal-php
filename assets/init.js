@@ -18,7 +18,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
 
         let evtarget = new EventTarget();
         evtarget.addEventListener("data", (d) => {
-          eventCallback(d);
+          eventCallback(d.detail);
         }, {
           signal: abortController.signal
         });
