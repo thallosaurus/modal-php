@@ -7,16 +7,28 @@ let abortSignals = new Map();
  * @param {*} [rej=null] reject function of a Promise
  * @return {*} 
  */
-function createOptions(res = null, rej = null) {
+function createOptions(res = null, rej = null, eventCallback = null) {
   return {
     onShow: modal => {
       //is used to remove all event listeners at once after close
       let abortController = new AbortController();
+
+      let evtarget = new EventTarget();
+      evtarget.addEventListener("data", (d) => {
+        console.log(d);
+      }, {
+        signal: abortController.signal
+      });
+
       let form = modal.querySelector("form");
 
       modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
 
         btn.addEventListener("click", (btnevent) => {
+          /*evtarget.dispatchEvent(new CustomEvent("data", {
+            data: "Hello World"
+          }));*/
+
           btnevent.preventDefault();
           // console.log(btnevent.target.dataset.action);
           MicroModal.close(modal.id);
@@ -28,9 +40,25 @@ function createOptions(res = null, rej = null) {
         }, {
           signal: abortController.signal
         });
-        
+
         // let data = createObjectFromForm(form);
       });
+
+      modal.querySelectorAll("button[data-modal-ignore]").forEach(btn => {
+        btn.addEventListener("click", (btnevent) => {
+          btnevent.preventDefault();
+
+          evtarget.dispatchEvent(new CustomEvent("data", {
+            detail: {
+              event: btnevent.target.dataset.action,
+              ...createObjectFromForm(form)
+            }
+          }));
+
+        }, {
+          signal: abortController.signal
+        });
+      })
 
       //console.log(form);
       form.addEventListener("submit", (event) => {
@@ -40,13 +68,13 @@ function createOptions(res = null, rej = null) {
         let data = createObjectFromForm(event.target);
         // debugger;
         // if (event.target.dataset.action =! "no-submit") {
-          res && res(data);
-          MicroModal.close(modal.id);
-          form.reset();
+        res && res(data);
+        MicroModal.close(modal.id);
+        form.reset();
         // } else {
-          // MicroModal.emit('submit', data);
-          // Streams
-          // console.log("Stream submit", data);
+        // MicroModal.emit('submit', data);
+        // Streams
+        // console.log("Stream submit", data);
         // }
       }, {
         signal: abortController.signal
@@ -96,7 +124,7 @@ function createOptions(res = null, rej = null) {
     onClose: (modal) => {
       //alert(`${modal.id} got hidden, ${trigger.id} was the trigger`);
       //alert("Closing modal");
-      
+
       //remove all remaining listeners here
       console.log(modal);
       console.log(abortSignals);
@@ -109,7 +137,6 @@ function createOptions(res = null, rej = null) {
 
 window.addEventListener("load", () => {
   MicroModal.init(createOptions());
-  MicroModal.prototype = EventTarget;
 
   //console.debug("Micromodal init");
 });
@@ -136,9 +163,9 @@ function createObjectFromForm(form) {
 
   for (let t of form) {
     if (Boolean(t.name) && !(Object.keys(t.dataset).includes("modalIgnore"))) {
-      
+
       let value;
-      
+
       console.log(t);
       // debugger;
 
@@ -156,11 +183,11 @@ function createObjectFromForm(form) {
           value = t.value;
       }
 
-/*       if (t.type == "checkbox") {
-        value = t.checked;
-      } else {
-        value = t.value;
-      } */
+      /*       if (t.type == "checkbox") {
+              value = t.checked;
+            } else {
+              value = t.value;
+            } */
 
       let key = Boolean(t.name) ? t.name : t.id;
 
@@ -183,9 +210,15 @@ function createObjectFromForm(form) {
  * @param {string} id
  * @return {Promise<Object>} 
  */
-function openModalById(id) {
+function openModalById(id, eventCallback = null) {
   return new Promise((res, rej) => {
-    let options = createOptions(res, rej);
+    let options = createOptions(res, rej, eventCallback);
     MicroModal.show(id, options);
   });
+}
+
+class Modal {
+  constructor() {
+
+  }
 }

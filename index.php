@@ -47,6 +47,14 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
                 .then(e => {
                     console.log(e);
                 });
+            });
+
+            document.querySelector("#teamTest")
+            .addEventListener("click", (e) => {
+                openModalById("teamtest")
+                .then(e => {
+                    console.log(e);
+                });
             })
         });
     </script>
@@ -87,15 +95,20 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
             "Erdbeeren"
         ]
     ]);
+
+    $testForTeam = new Modal("teamtest", "test");
+    // $radiotest->setFilename("test123");
     // $radiotest->setFilename("radio-test");
 
     //$dbg = new Modal("test", "test");
     //echo $dbg->getOpenButton("Test me");
+    // echo $testForTeam->getOpenButton("Test me");
     ?>
 
     <button type="button" id="openFull">Open with return values</button>
     <button type="button" id="btntest">Open buttontest</button>
     <button type="button" id="openRadio">Open radiotest</button>
+    <button type="button" id="teamTest">Open teamtest</button>
         <?php
             echo Modal::getAllModals();
         ?>
