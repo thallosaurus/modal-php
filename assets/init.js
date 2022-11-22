@@ -12,25 +12,38 @@ function createOptions(res = null, rej = null, eventCallback = null) {
     onShow: modal => {
       //is used to remove all event listeners at once after close
       let abortController = new AbortController();
-
-      let evtarget = new EventTarget();
-      evtarget.addEventListener("data", (d) => {
-        console.log(d);
-      }, {
-        signal: abortController.signal
-      });
-
       let form = modal.querySelector("form");
+
+      if (eventCallback) {
+
+        let evtarget = new EventTarget();
+        evtarget.addEventListener("data", (d) => {
+          console.log(d);
+        }, {
+          signal: abortController.signal
+        });
+
+        modal.querySelectorAll("button[data-modal-ignore]").forEach(btn => {
+          btn.addEventListener("click", (btnevent) => {
+            btnevent.preventDefault();
+  
+            evtarget.dispatchEvent(new CustomEvent("data", {
+              detail: {
+                event: btnevent.target.dataset.action,
+                ...createObjectFromForm(form)
+              }
+            }));
+  
+          }, {
+            signal: abortController.signal
+          });
+        })
+      }
 
       modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
 
         btn.addEventListener("click", (btnevent) => {
-          /*evtarget.dispatchEvent(new CustomEvent("data", {
-            data: "Hello World"
-          }));*/
-
           btnevent.preventDefault();
-          // console.log(btnevent.target.dataset.action);
           MicroModal.close(modal.id);
           res({
             event: "button",
@@ -41,41 +54,14 @@ function createOptions(res = null, rej = null, eventCallback = null) {
           signal: abortController.signal
         });
 
-        // let data = createObjectFromForm(form);
       });
 
-      modal.querySelectorAll("button[data-modal-ignore]").forEach(btn => {
-        btn.addEventListener("click", (btnevent) => {
-          btnevent.preventDefault();
-
-          evtarget.dispatchEvent(new CustomEvent("data", {
-            detail: {
-              event: btnevent.target.dataset.action,
-              ...createObjectFromForm(form)
-            }
-          }));
-
-        }, {
-          signal: abortController.signal
-        });
-      })
-
-      //console.log(form);
       form.addEventListener("submit", (event) => {
         event.preventDefault();
-
-        //data-micromodal-close does interfere with the submit listener. so we close it manually
         let data = createObjectFromForm(event.target);
-        // debugger;
-        // if (event.target.dataset.action =! "no-submit") {
         res && res(data);
         MicroModal.close(modal.id);
         form.reset();
-        // } else {
-        // MicroModal.emit('submit', data);
-        // Streams
-        // console.log("Stream submit", data);
-        // }
       }, {
         signal: abortController.signal
       });
@@ -85,7 +71,6 @@ function createOptions(res = null, rej = null, eventCallback = null) {
           //User used enter to submit form. Close Window and resolve with object
           case "Enter":
             e.preventDefault();
-            //alert("Key down")
             res && res(createObjectFromForm(form));
             MicroModal.close(modal.id);
             form.reset();
@@ -98,8 +83,6 @@ function createOptions(res = null, rej = null, eventCallback = null) {
             form.reset();
             MicroModal.close(modal.id);
             break;
-
-          //return false;
         }
       }, {
         capture: false,
@@ -108,9 +91,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
 
       let closeBtns = modal.querySelectorAll("[data-cancel]");
       closeBtns.forEach(btn => {
-        //console.log(btn);
         btn.addEventListener("click", (e) => {
-          //console.log("close", e);
           form.reset();
           rej && rej();
         });
@@ -122,13 +103,10 @@ function createOptions(res = null, rej = null, eventCallback = null) {
       console.log(abortSignals);
     },
     onClose: (modal) => {
-      //alert(`${modal.id} got hidden, ${trigger.id} was the trigger`);
-      //alert("Closing modal");
 
       //remove all remaining listeners here
       console.log(modal);
       console.log(abortSignals);
-      // debugger;
       abortSignals.get(modal.id).abort();
       abortSignals.delete(modal.id);
     }
@@ -137,8 +115,6 @@ function createOptions(res = null, rej = null, eventCallback = null) {
 
 window.addEventListener("load", () => {
   MicroModal.init(createOptions());
-
-  //console.debug("Micromodal init");
 });
 
 /**
@@ -157,8 +133,6 @@ function createObjectFromForm(form) {
   if (Object.keys(form.dataset).includes("hasTabs")) {
     currentTab = form.querySelector(".w-tab input[type='radio']:checked").id;
     form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input");
-    // console.log(form);
-    // debugger;
   }
 
   for (let t of form) {
@@ -167,7 +141,6 @@ function createObjectFromForm(form) {
       let value;
 
       console.log(t);
-      // debugger;
 
       switch (t.type) {
         case "checkbox":
@@ -175,19 +148,12 @@ function createObjectFromForm(form) {
           break;
 
         case "select-one":
-          //console.log(t.selectedOptions);
           value = t.selectedOptions[0].value;
           break;
 
         default:
           value = t.value;
       }
-
-      /*       if (t.type == "checkbox") {
-              value = t.checked;
-            } else {
-              value = t.value;
-            } */
 
       let key = Boolean(t.name) ? t.name : t.id;
 
@@ -215,10 +181,4 @@ function openModalById(id, eventCallback = null) {
     let options = createOptions(res, rej, eventCallback);
     MicroModal.show(id, options);
   });
-}
-
-class Modal {
-  constructor() {
-
-  }
 }
