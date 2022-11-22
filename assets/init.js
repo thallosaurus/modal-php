@@ -26,7 +26,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
           signal: abortController.signal
         });
 
-        modal.querySelectorAll("button[data-modal-ignore]").forEach(btn => {
+        modal.querySelectorAll("button[data-modal-ignore]:not(data-cancel)").forEach(btn => {
           btn.addEventListener("click", (btnevent) => {
             btnevent.preventDefault();
   
