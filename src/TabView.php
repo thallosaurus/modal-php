@@ -20,10 +20,13 @@ namespace Donstrange\Modalsupport {
             $data = $this->tabs[$index];
             $checked = $data["checked"] ? " checked" : "";
 
+            //change to better value
+            $nonce = rand(0, 100000);
+
             return join("", [
                 '<div class="w-tab">',
-                '<input type="radio" name="tab" data-modal-ignore id="tab' . $index . '"' . $checked . '>',
-                '<label for="tab'. $index . '">' . $data["tabtitle"] . '</label>',
+                '<input type="radio" name="tab" data-modal-ignore id="tab' . $index . '-' . $nonce . '"' . $checked . '>',
+                '<label for="tab' . $index . '-' . $nonce . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
                 // "Hallo Welt 2",
                 $this->readTemplate($data["templatename"]),
