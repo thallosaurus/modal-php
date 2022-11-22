@@ -134,7 +134,7 @@ function createObjectFromForm(form) {
   let currentTab = null;
 
   if (Object.keys(form.dataset).includes("hasTabs")) {
-    currentTab = form.querySelector(".w-tab input[type='radio']:checked").id;
+    currentTab = form.querySelector(".w-tab input[type='radio']:checked").name;
     form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input");
   }
 

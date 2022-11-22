@@ -25,7 +25,7 @@ namespace Donstrange\Modalsupport {
 
             return join("", [
                 '<div class="w-tab">',
-                '<input type="radio" name="tab" data-modal-ignore id="tab' . $index . '-' . $nonce . '"' . $checked . '>',
+                '<input type="radio" name="tab'.$index.'" data-modal-ignore id="tab' . $index . '-' . $nonce . '"' . $checked . '>',
                 '<label for="tab' . $index . '-' . $nonce . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
                 // "Hallo Welt 2",
