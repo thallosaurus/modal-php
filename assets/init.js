@@ -35,6 +35,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
             evtarget.dispatchEvent(new CustomEvent("data", {
               detail: {
                 event: btnevent.target.dataset.action,
+                eventName: btnevent.target.dataset.modalEvent ?? "data"
                 ...createObjectFromForm(form)
               }
             }));
