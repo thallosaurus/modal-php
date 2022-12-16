@@ -41,6 +41,18 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
                 })
             })
 
+            document.querySelector("#openRadio2")
+            .addEventListener("click", (e) => {
+                openModalById("radio")
+                .then(data => {
+                    console.log(data);
+                    // alert(`Deine Lieblingsfrüchte sind ${data.fruit}`);
+                })
+                .catch(() => {
+                    console.log("Dialog was cancelled");
+                })
+            })
+
             document.querySelector("#btntest")
             .addEventListener("click", (e) => {
                 openModalById("buttontest")
@@ -103,11 +115,14 @@ use const Donstrange\Modalsupport\SHOW_CLOSE_X;
     //$dbg = new Modal("test", "test");
     //echo $dbg->getOpenButton("Test me");
     // echo $testForTeam->getOpenButton("Test me");
+
+    $radio = new Modal("radio", "radio");
     ?>
 
     <button type="button" id="openFull">Open with return values</button>
     <button type="button" id="btntest">Open buttontest</button>
     <button type="button" id="openRadio">Open radiotest</button>
+    <button type="button" id="openRadio2">Open radiotest2</button>
     <button type="button" id="teamTest">Open teamtest</button>
         <?php
             echo Modal::getAllModals();

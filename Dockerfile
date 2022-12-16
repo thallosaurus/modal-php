@@ -9,7 +9,9 @@ RUN \
     && docker-php-ext-configure mysqli --with-mysqli=mysqlnd \
     && docker-php-ext-install pdo_mysql
 
-RUN yes | pecl install xdebug && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini;
+#RUN yes | pecl install xdebug && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini;
+RUN pecl install xdebug-3.0.0 && docker-php-ext-enable xdebug
+
 RUN mkdir /src
 
 WORKDIR /src

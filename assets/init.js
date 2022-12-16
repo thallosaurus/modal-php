@@ -157,8 +157,17 @@ function createObjectFromForm(form) {
           value = t.selectedOptions[0].value;
           break;
 
+        case "radio":
+          if (t.checked) {
+            value = t.value;
+          } else {
+            continue;
+          }
+        break;
+
         default:
           value = t.value;
+          break;
       }
 
       let key = Boolean(t.name) ? t.name : t.id;
