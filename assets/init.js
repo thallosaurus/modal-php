@@ -146,7 +146,7 @@ function createObjectFromForm(form) {
 
       let value;
 
-      console.log(t);
+      // console.log(t);
 
       switch (t.type) {
         case "checkbox":
