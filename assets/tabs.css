@@ -15,7 +15,7 @@
     display: none;
 }
 
-input[type="radio"]:checked ~ label {
+.w-tab input[type="radio"]:checked + label {
     /* border: 1px solid black; */
     background-color: lightgrey;
     font-weight: bold;

@@ -10,7 +10,7 @@ namespace Donstrange\Modalsupport {
         /**
          * Path where all modal artifacts should be loaded from
          */
-        private static string $modalArtifactsPath = __DIR__ . "/../example";
+        protected static string $modalArtifactsPath = __DIR__ . "/../example";
 
         /* TWIG */
 
@@ -22,10 +22,10 @@ namespace Donstrange\Modalsupport {
         function __construct()
         {
             //TWIG
-            /*if (self::$fsLoader == null) {
+            if (self::$fsLoader == null) {
                 self::$fsLoader = new FilesystemLoader(self::$modalArtifactsPath);
                 self::$twig = new Environment(self::$fsLoader);
-            }*/
+            }
         }
 
         public static function setModalPath($path)
@@ -35,9 +35,9 @@ namespace Donstrange\Modalsupport {
 
         static $templateCache = [];
 
-        public function readTemplate($mfilename): string {
+        public function readTemplate($mfilename): \Twig\TemplateWrapper {
             // return self::$twig->render($mfilename . ".html", $data);
-            $path = self::$modalArtifactsPath . "/" . $mfilename . ".html";
+/*             $path = self::$modalArtifactsPath . "/" . $mfilename . ".html";
             if (isset(self::$templateCache[$path])) {
                 return self::$templateCache[$path];
                 
@@ -46,7 +46,9 @@ namespace Donstrange\Modalsupport {
                 
                 self::$templateCache[$path] = $file;
                 return self::$templateCache[$path];
-            }
+            } */
+
+            return self::$twig->load($mfilename);
         }
 
         public abstract function render(): string;
