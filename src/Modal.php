@@ -266,7 +266,7 @@ namespace Donstrange\Modalsupport {
                     $masterData = array_merge($masterData, $data->templateData);
                 }
                 
-                $data = $twig->render($this->modalFilename . ".html", $this->masterData);
+                $data = $twig->render($this->modalFilename . ".html", $masterData);
                 // return $this->getModalContent($data);
             }
             return $this->getModalContent($data);
