@@ -259,8 +259,14 @@ namespace Donstrange\Modalsupport {
                 $twig = new Environment($loader);
                 
                 // var_dump($this->modalFilename);
+
+                $masterData = [];
+
+                foreach (self::$modals as $data) {
+                    $masterData = array_merge($masterData, $data->templateData);
+                }
                 
-                $data = $twig->render($this->modalFilename . ".html", $this->templateData);
+                $data = $twig->render($this->modalFilename . ".html", $this->masterData);
                 // return $this->getModalContent($data);
             }
             return $this->getModalContent($data);
