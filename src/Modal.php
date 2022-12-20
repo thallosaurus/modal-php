@@ -4,6 +4,7 @@ namespace Donstrange\Modalsupport {
 
     use Twig\Environment;
     use Twig\Loader\ArrayLoader;
+    use Twig\Loader\FilesystemLoader;
 
     const SHOW_SUBMIT = 0b001;
     const SHOW_CLOSE = 0b010;
@@ -110,7 +111,7 @@ namespace Donstrange\Modalsupport {
 
         public static function getAllModals($debug = false)
         {
-            if (!$debug) {
+            /*if (!$debug) {
                 $map = array_map(function ($m) {
                     return $m->render();
                 }, self::$modals);
@@ -152,7 +153,12 @@ namespace Donstrange\Modalsupport {
                 //return $this->getModalContent();
             }
 
-            //return join("", $map);
+            //return join("", $map);*/
+
+            $map = array_map(function ($m) {
+                return $m->render();
+            }, self::$modals);
+            return join("", $map);
         }
 
         /**
@@ -180,7 +186,7 @@ namespace Donstrange\Modalsupport {
 
         public function addTabView(TabView $view)
         {
-            // $view->setRef($this);
+            $view->setRef($this);
             $this->tabView = $view;
             $this->hasTabs = true;
         }
@@ -190,9 +196,9 @@ namespace Donstrange\Modalsupport {
          *
          * @return string
          */
-        public function getModalContent(): string
+        public function getModalContent($content): string
         {
-            $content = "";
+/*             $content = "";
             if ($this->hasTabs) {
                 $content = $this->tabView->render();
                 // print_r($content);
@@ -201,8 +207,8 @@ namespace Donstrange\Modalsupport {
                 // $content = $this->readTemplate($this->modalFilename, $this->templateData);
             } else {
                 // var_dump($this->content);
-                $content = $this->readTemplate($this->modalFilename);
-            }
+                $content = $this->render();
+            } */
 
             $modalRaw = [
                 '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
@@ -233,10 +239,31 @@ namespace Donstrange\Modalsupport {
 
         public function render(): string
         {
-            $loader = new ArrayLoader(["tmp" => $this->getModalContent()]);
-            $twig = new Environment($loader);
+            // $loader = new ArrayLoader(["tmp" => $this->getModalContent()]);
+            // $path = self::$modalArtifactsPath;
 
-            return $twig->render("tmp", $this->templateData);
+            if ($this->hasTabs) {
+                $data = $this->tabView->render();
+                // print_r($content);
+                // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
+
+                // $content = $this->readTemplate($this->modalFilename, $this->templateData);
+                // var_dump($this->modalFilename);
+            } else {
+                // var_dump($this->content);
+                // $content = $this->render();
+                $loader = new FilesystemLoader([
+                    self::$modalArtifactsPath
+                ]);
+                
+                $twig = new Environment($loader);
+                
+                // var_dump($this->modalFilename);
+                
+                $data = $twig->render($this->modalFilename . ".html", $this->templateData);
+                // return $this->getModalContent($data);
+            }
+            return $this->getModalContent($data);
             //return $this->getModalContent();
         }
     }

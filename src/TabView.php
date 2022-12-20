@@ -29,7 +29,7 @@ namespace Donstrange\Modalsupport {
                 '<label for="tab' . $index . '-' . $nonce . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
                 // "Hallo Welt 2",
-                $this->readTemplate($data["templatename"]),
+                $this->readTemplate($data["templatename"] . ".html")->render($this->ref->templateData),
                 // $data["content"],
                 '</div>',
                 '</div>',
@@ -37,7 +37,7 @@ namespace Donstrange\Modalsupport {
         }
 
         public function setRef(Modal $modal) {
-            // $this->ref = $modal;
+            $this->ref = $modal;
         }
 
         private function getAllTabsRendered(): string {

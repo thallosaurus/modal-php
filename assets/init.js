@@ -138,7 +138,7 @@ function createObjectFromForm(form) {
 
   if (Object.keys(form.dataset).includes("hasTabs")) {
     currentTab = "tab"+form.querySelector(".w-tab input[type='radio']:checked").dataset.tabid;
-    form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input");
+    form = form.querySelectorAll(".w-tab input[type='radio']:checked ~ .tab-content input, .w-tab input[type='radio']:checked ~ .tab-content select");
   }
 
   for (let t of form) {
@@ -146,14 +146,16 @@ function createObjectFromForm(form) {
 
       let value;
 
-      // console.log(t);
+      console.log(t);
 
       switch (t.type) {
         case "checkbox":
+          // debugger;
           value = t.checked;
           break;
 
         case "select-one":
+          // debugger;
           value = t.selectedOptions[0].value;
           break;
 
