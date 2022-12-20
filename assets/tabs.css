@@ -7,7 +7,7 @@
     height: 49vh;
 }
 
-.w-tab input[type="radio"]:checked ~ .tab-content{
+.w-tab input[type="radio"]:checked + .tab-content{
     display: block;
 }
 

@@ -25,9 +25,9 @@ namespace Donstrange\Modalsupport {
 
             $masterData = [];
 
-                foreach ($this->ref->modals as $data) {
+/*                 foreach ($this->ref->modals as $data) {
                     $masterData = array_merge($masterData, $data->templateData);
-                }
+                } */
                 
                 // $data = $twig->render($this->modalFilename . ".html", $this->masterData);
 
