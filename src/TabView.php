@@ -25,32 +25,30 @@ namespace Donstrange\Modalsupport {
 
             $masterData = [];
 
-            foreach ($this->ref->modals as $data) {
-                $masterData = array_merge($masterData, $data->templateData);
-            }
-
-            // $data = $twig->render($this->modalFilename . ".html", $this->masterData);
+                foreach ($this->ref->modals as $data) {
+                    $masterData = array_merge($masterData, $data->templateData);
+                }
+                
+                // $data = $twig->render($this->modalFilename . ".html", $this->masterData);
 
             return join("", [
                 '<div class="w-tab">',
-                '<input type="radio" name="tab" data-tabid="' . $index . '" data-modal-ignore id="tab' . $index . '-' . $nonce . '"' . $checked . '>',
+                '<input type="radio" name="tab" data-tabid="'.$index.'" data-modal-ignore id="tab' . $index . '-' . $nonce . '"' . $checked . '>',
                 '<label for="tab' . $index . '-' . $nonce . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
                 // "Hallo Welt 2",
-                $this->readTemplate($data["templatename"] . ".html")->render($masterData),
+                $this->readTemplate($data["templatename"] . ".html")->render($this->ref->templateData),
                 // $data["content"],
                 '</div>',
                 '</div>',
             ]);
         }
 
-        public function setRef(Modal $modal)
-        {
+        public function setRef(Modal $modal) {
             $this->ref = $modal;
         }
 
-        private function getAllTabsRendered(): string
-        {
+        private function getAllTabsRendered(): string {
             $str = "";
 
             for ($i = 0; $i < sizeof($this->tabs); $i++) {
@@ -61,7 +59,7 @@ namespace Donstrange\Modalsupport {
         }
 
         public function render(): string
-        {
+        {            
             return join("", [
                 '<div class="tab-view">',
                 $this->getAllTabsRendered(),
