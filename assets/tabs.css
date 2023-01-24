@@ -36,6 +36,8 @@
     background-color: lightgrey;
     height: -webkit-fill-available;
     width: -webkit-fill-available;
+    height: -moz-available;
+    width: -moz-available;
     left: 0;
     padding: 10px;
     overflow-x: scroll;
