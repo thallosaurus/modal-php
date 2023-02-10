@@ -13,14 +13,25 @@ jobs:
     name: phpdoc
     image: phpdoc/phpdoc:3
     args: -d src/ -t docs/
+    workingDir: '@JOB_WORKSPACE@'
     volumeMounts:
-    - sourcePath: .
+    - sourcePath: '@JOB_WORKSPACE@'
       targetPath: /data
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishSiteStep
     name: Documentation
     artifacts: docs
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: download phpdocumentor
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - wget https://phpdoc.org/phpDocumentor.phar
+      - chmod +x phpDocumentor.phar
+      - php phpDocumentor.phar -d src/ -t docs/
+    useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
