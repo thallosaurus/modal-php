@@ -18,23 +18,8 @@ jobs:
       targetPath: /data
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !PublishArtifactStep
+  - !PublishSiteStep
     name: publish
-    artifacts: docs/
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !PublishSiteStep
-    name: huh
-    artifacts: docs/**
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  retryCondition: never
-  maxRetries: 3
-  retryDelay: 30
-  timeout: 3600
-- name: Publish docs
-  jobExecutor: Main
-  steps:
-  - !PublishSiteStep
-    name: Publish Docs
     artifacts: docs/**
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
