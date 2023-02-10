@@ -10,7 +10,7 @@ namespace Donstrange\Modalsupport {
         /**
          * Path where all modal artifacts should be loaded from
          */
-        protected static string $modalArtifactsPath = __DIR__ . "/../example";
+        protected static string $modalArtifactsPath = __DIR__ . "/../modals";
 
         /* TWIG */
 

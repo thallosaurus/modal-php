@@ -28,17 +28,25 @@ namespace Donstrange\Modalsupport {
          */
         private string $modalId;
 
+        /**
+         * The filename of the template.
+         * Can be null if a tab view is used
+         * @var string|null
+         */
         private ?string $modalFilename;
 
-        private $data = [];
+        //private $data = [];
 
         /**
          * Given content of the modal
-         *
          * @var string
          */
-        private $content;
+        //private $content;
 
+        /**
+         * Summary of templateData
+         * @var mixed
+         */
         public $templateData = [];
 
         private string $title = "Micromodal";
@@ -54,10 +62,9 @@ namespace Donstrange\Modalsupport {
         // private string $modalArtifactName;
 
         /**
-         * Constructor of the class
-         *
-         * @param string $id The id of the modal
-         * @param string $content Modal content, must be form elements without form parent element
+         * Constructs a new modal. Gets added to the global modal queue and gets flushed by calling Modal#getAllModals().
+         * @param string $id The unique id of the modal window
+         * @param string|null $filename filename of the template that gets used. Can be omitted if using a TabView.
          */
         function __construct(string $id, ?string $filename = null)
         {
@@ -75,8 +82,8 @@ namespace Donstrange\Modalsupport {
         /**
          * Returns a button to open the modal without object support
          *
-         * @param string $label
-         * @param array $classList
+         * @param string $label Label of the button
+         * @param array $classList List of CSS-classes without dot to be applied to the button
          * @deprecated
          * @return string
          */
@@ -109,6 +116,11 @@ namespace Donstrange\Modalsupport {
             return "<style>" . $cssData . $tabCss . "</style>" . "<script>" . $jsData . $init . "</script>";
         }
 
+        /**
+         * Summary of getAllModals
+         * @param mixed $debug Debug Flag (unused as of 0.0.1)
+         * @return string
+         */
         public static function getAllModals($debug = false)
         {
             /*if (!$debug) {
@@ -162,28 +174,51 @@ namespace Donstrange\Modalsupport {
         }
 
         /**
-         * @deprecated
+         * Set the filename of the used template
+         * @param string $fname The Filename with extension
+         * @return void
          */
         public function setFilename(string $fname)
         {
             $this->modalFilename = $fname;
         }
 
+        /**
+         * Sets the Data to be filled in the templates
+         * @param array $data Key/Value Array of the data
+         * @return void
+         */
         public function setData(array $data)
         {
             $this->templateData = $data;
         }
 
+        /**
+         * Sets the master title of the modal
+         * @param string $title The title to be used
+         * @return void
+         */
         public function setTitle(string $title)
         {
             $this->title = $title;
         }
 
+        /**
+         * Set flags that control which buttons get shown at the bottom.
+         * Also controls the small X in the right corner
+         * @param mixed $flags See Modal#SHOW_SUBMIT, Modal#SHOW_CLOSE, Modal#SHOW_CLOSE_X
+         * @return void
+         */
         public function setVisibleFlags($flags)
         {
             $this->visibleFlags = $flags;
         }
 
+        /**
+         * Sets and activates a tab view for the modal
+         * @param TabView $view The Tabview to be used
+         * @return void
+         */
         public function addTabView(TabView $view)
         {
             $view->setRef($this);
@@ -237,6 +272,10 @@ namespace Donstrange\Modalsupport {
             return join("", $modalRaw);
         }
 
+        /**
+         * Returns the rendered Modal as HTML
+         * @return string
+         */
         public function render(): string
         {
             // $loader = new ArrayLoader(["tmp" => $this->getModalContent()]);

@@ -30,12 +30,12 @@ function createOptions(res = null, rej = null, eventCallback = null) {
           btn.addEventListener("click", (btnevent) => {
             btnevent.preventDefault();
 
-            let eventName = btnevent.target.dataset.modalEvent ?? "data";
+            let eventName = Boolean(btnevent.target.dataset.modalEvent) ? btnevent.target.dataset.modalEvent : "data";
   
             evtarget.dispatchEvent(new CustomEvent("data", {
               detail: {
                 event: btnevent.target.dataset.action,
-                eventName: btnevent.target.dataset.modalEvent ?? "data",
+                eventName: eventName,
                 ...createObjectFromForm(form)
               }
             }));

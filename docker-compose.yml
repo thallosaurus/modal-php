@@ -1,32 +1,6 @@
 version: '2'
 
-#networks:
-#  app-tier:
-#    driver: bridge
-
 services:
-#  mysql:
-#    container_name: mysql
-#    build:
-#      context: ./db
-#      dockerfile: Dockerfile
-#    volumes:
-#      - ./db/mysql_data:/var/lib/mysql
-#      #- ./db/urlaubskalender.sql:/docker-entrypoint-startdb.d/init.sql
-#    ports:
-#      - 3306:3306
-#    networks:
-#      - app-tier
-#  phpmyadmin:
-#    image: phpmyadmin
-#    restart: always
-#    ports:
-#      - 8080:80
-#    environment:
-#      - PMA_HOST=mysql
-#      - PMA_ARBITRARY=1
-#    networks:
-#      - app-tier
   php:
     build: 
       context: .
@@ -37,5 +11,3 @@ services:
       - .:/src
       - ./php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       - ./php/caches:/var/tmp/php
-#    networks:
-#      - app-tier
