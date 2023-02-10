@@ -1,7 +1,7 @@
 version: 19
 jobs:
 - name: Create docs
-  jobExecutor: Main
+  jobExecutor: Main-Shell
   steps:
   - !CheckoutStep
     name: Checkout
@@ -23,6 +23,14 @@ jobs:
   - !PublishSiteStep
     name: Documentation
     artifacts: docs
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: debug ls
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - ls
+    useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
