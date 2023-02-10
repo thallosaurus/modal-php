@@ -17,6 +17,14 @@ jobs:
       targetPath: /data
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !CommandStep
+    name: debug ls
+    runInContainer: false
+    interpreter: !DefaultInterpreter
+      commands:
+      - ls docs/
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishSiteStep
     name: Documentation
     artifacts: docs
