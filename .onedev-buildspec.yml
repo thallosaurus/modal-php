@@ -22,16 +22,6 @@ jobs:
     name: Documentation
     artifacts: docs
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !CommandStep
-    name: download phpdocumentor
-    runInContainer: false
-    interpreter: !DefaultInterpreter
-      commands:
-      - wget https://phpdoc.org/phpDocumentor.phar
-      - chmod +x phpDocumentor.phar
-      - php phpDocumentor.phar -d src/ -t docs/
-    useTTY: false
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
   retryDelay: 30
