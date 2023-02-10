@@ -8,7 +8,7 @@ jobs:
     cloneCredential: !DefaultCredential {}
     withLfs: false
     withSubmodules: false
-    condition: ALWAYS
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !RunContainerStep
     name: phpdoc
     image: phpdoc/phpdoc:3
@@ -19,7 +19,7 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishSiteStep
     name: Documentation
-    artifacts: docs/*
+    artifacts: docs
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
