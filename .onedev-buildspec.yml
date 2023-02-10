@@ -12,7 +12,7 @@ jobs:
   - !RunContainerStep
     name: phpdoc
     image: phpdoc/phpdoc:3
-    args: -d ./src -t docs
+    args: -d src/ -t docs/
     volumeMounts:
     - sourcePath: .
       targetPath: /data
