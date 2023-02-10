@@ -1,7 +1,7 @@
 version: 19
 jobs:
 - name: Create docs
-  jobExecutor: Main-Shell
+  jobExecutor: Main
   steps:
   - !CheckoutStep
     name: Checkout
