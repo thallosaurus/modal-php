@@ -12,8 +12,9 @@ jobs:
   - !RunContainerStep
     name: phpdoc
     image: phpdoc/phpdoc:3
+    args: -d ./src -t docs
     volumeMounts:
-    - sourcePath: src
+    - sourcePath: .
       targetPath: /data
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
