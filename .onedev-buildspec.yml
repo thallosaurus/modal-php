@@ -13,9 +13,8 @@ jobs:
     name: phpdoc
     image: phpdoc/phpdoc:3
     args: -d src/ -t docs/
-    workingDir: '@JOB_WORKSPACE@'
     volumeMounts:
-    - sourcePath: '@JOB_WORKSPACE@'
+    - sourcePath: .
       targetPath: /data
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
