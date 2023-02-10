@@ -18,13 +18,13 @@ jobs:
       targetPath: /data
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !PublishSiteStep
-    name: Publish Docs
-    artifacts: src/
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishArtifactStep
     name: publish
     artifacts: docs/
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  - !PublishSiteStep
+    name: Publish Docs
+    artifacts: src/
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
