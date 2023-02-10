@@ -21,16 +21,8 @@ jobs:
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishSiteStep
-    name: Documentation
-    artifacts: docs
-    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
-  - !CommandStep
-    name: debug ls
-    runInContainer: false
-    interpreter: !DefaultInterpreter
-      commands:
-      - ls
-    useTTY: false
+    name: Publish Docs
+    artifacts: src/
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
   maxRetries: 3
