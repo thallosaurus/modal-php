@@ -21,3 +21,13 @@ jobs:
   maxRetries: 3
   retryDelay: 30
   timeout: 3600
+- name: Documentation
+  steps:
+  - !PublishSiteStep
+    name: Publish Docs
+    artifacts: docs/*
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
