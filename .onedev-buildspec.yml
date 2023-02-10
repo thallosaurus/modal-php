@@ -16,6 +16,8 @@ jobs:
     volumeMounts:
     - sourcePath: .
       targetPath: /data
+    - sourcePath: docs/
+      targetPath: /data/docs
     useTTY: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishSiteStep
