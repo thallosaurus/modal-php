@@ -1,0 +1,23 @@
+version: 19
+jobs:
+- name: Create docs
+  jobExecutor: Main
+  steps:
+  - !CheckoutStep
+    name: Checkout
+    cloneCredential: !DefaultCredential {}
+    withLfs: false
+    withSubmodules: false
+    condition: ALWAYS
+  - !RunContainerStep
+    name: phpdoc
+    image: phpdoc/phpdoc:3
+    volumeMounts:
+    - sourcePath: src
+      targetPath: /data
+    useTTY: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
