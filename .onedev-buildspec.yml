@@ -19,7 +19,6 @@ jobs:
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   - !PublishSiteStep
     name: Documentation
-    sourcePath: docs
     artifacts: docs
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
   retryCondition: never
