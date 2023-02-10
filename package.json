@@ -1,0 +1,21 @@
+{
+  "name": "modal-php",
+  "version": "0.0.1",
+  "description": "An easy way for PHP Applications to embed Dialog Windows - Powered by [micromodal.js](https://github.com/ghosh/Micromodal) and [twig](https://twig.symphony.com)",
+  "main": "assets/init.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.cyber.psych0si.is/modal-php.git"
+  },
+  "author": "thallosaurus",
+  "license": "MIT",
+  "devDependencies": {
+    "jsdoc": "^4.0.0"
+  }
+}

@@ -1,11 +1,28 @@
 <?php
 
 namespace Donstrange\Modalsupport {
+    
     class TabView extends TemplateLoader
     {
+        /**
+         * Holds all added templates for each tab
+         * @var array
+         */
         private array $tabs = [];
+
+        /**
+         * Backreference to the parent Modal
+         * @var Modal|null
+         */
         private ?Modal $ref = null;
 
+        /**
+         * Adds a template to the TabView
+         * @param mixed $title The Label of the Tab
+         * @param mixed $templatename The Filename of the template without extension (.html)
+         * @param mixed $checked Is true if this tab should be preselected
+         * @return void
+         */
         public function addTemplate($title, $templatename, $checked = false)
         {
             $this->tabs[] = [
@@ -15,6 +32,11 @@ namespace Donstrange\Modalsupport {
             ];
         }
 
+        /**
+         * Renders the Tab of the given Index and returns it as string
+         * @param mixed $index Tab Index
+         * @return string
+         */
         private function getTabRendered($index): string
         {
             $data = $this->tabs[$index];
@@ -25,29 +47,30 @@ namespace Donstrange\Modalsupport {
 
             $masterData = [];
 
-/*                 foreach ($this->ref->modals as $data) {
-                    $masterData = array_merge($masterData, $data->templateData);
-                } */
-                
-                // $data = $twig->render($this->modalFilename . ".html", $this->masterData);
-
             return join("", [
                 '<div class="w-tab">',
                 '<input type="radio" name="tab" data-tabid="'.$index.'" data-modal-ignore id="tab' . $index . '-' . $nonce . '"' . $checked . '>',
                 '<label for="tab' . $index . '-' . $nonce . '">' . $data["tabtitle"] . '</label>',
                 '<div class="tab-content">',
-                // "Hallo Welt 2",
                 $this->readTemplate($data["templatename"] . ".html")->render($this->ref->templateData),
-                // $data["content"],
                 '</div>',
                 '</div>',
             ]);
         }
 
+        /**
+         * @deprecated v0.0.2
+         * @param Modal $modal
+         * @return void
+         */
         public function setRef(Modal $modal) {
             $this->ref = $modal;
         }
 
+        /**
+         * Renders all Tabs as HTML
+         * @return string
+         */
         private function getAllTabsRendered(): string {
             $str = "";
 
@@ -58,6 +81,10 @@ namespace Donstrange\Modalsupport {
             return $str;
         }
 
+        /**
+         * Renders the whole TabView
+         * @return string
+         */
         public function render(): string
         {            
             return join("", [

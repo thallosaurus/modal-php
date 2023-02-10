@@ -5,7 +5,6 @@ use Donstrange\Modalsupport\Modal;
 use Donstrange\Modalsupport\TabView;
 
 use Donstrange\Modalsupport\TemplateLoader;
-use const Donstrange\Modalsupport\SHOW_CLOSE_X;
 use const Donstrange\Modalsupport\SHOW_SUBMIT;
 
 ?>
@@ -20,6 +19,7 @@ use const Donstrange\Modalsupport\SHOW_SUBMIT;
     <title>modal-php Demonstration</title>
 
     <?php
+    //Imports all required CSS and JavaScript files into the HTML
     echo Modal::getAssets();
 
     //Sets the path to where the templates are

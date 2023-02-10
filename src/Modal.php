@@ -71,11 +71,6 @@ namespace Donstrange\Modalsupport {
             // parent::__construct();
             $this->modalId = $id;
             $this->modalFilename = $filename;
-
-            //default
-            // $this->modalFilename = $this->modalId;
-
-            // $this->modalArtifactName = $filename;
             self::$modals[] = $this;
         }
 
@@ -123,50 +118,6 @@ namespace Donstrange\Modalsupport {
          */
         public static function getAllModals($debug = false)
         {
-            /*if (!$debug) {
-                $map = array_map(function ($m) {
-                    return $m->render();
-                }, self::$modals);
-                return join("", $map);
-            } else {
-
-                $map = array_map(function ($m) {
-                    return [
-                        "template" => $m->render(),
-                        "data" => $m->templateData
-                    ];
-                }, self::$modals);
-
-                //prepare master template here
-                $masterTemplate = join("<br>", array_map(
-                    function ($e) {
-                        return $e["template"];
-                    },
-                    $map
-                ));
-
-
-                $masterData = [];
-
-                foreach ($map as $data) {
-                    $masterData = array_merge($masterData, $data["data"]);
-                }
-                if ($debug) {
-                    var_dump($masterData);
-                    var_dump(htmlentities($masterTemplate));
-                }
-
-
-                $loader = new ArrayLoader(["tmp" => $masterTemplate]);
-                $twig = new Environment($loader);
-
-                //return $masterTemplate;
-                return $twig->render("tmp", $masterData);
-                //return $this->getModalContent();
-            }
-
-            //return join("", $map);*/
-
             $map = array_map(function ($m) {
                 return $m->render();
             }, self::$modals);
@@ -233,18 +184,6 @@ namespace Donstrange\Modalsupport {
          */
         public function getModalContent($content): string
         {
-/*             $content = "";
-            if ($this->hasTabs) {
-                $content = $this->tabView->render();
-                // print_r($content);
-                // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
-
-                // $content = $this->readTemplate($this->modalFilename, $this->templateData);
-            } else {
-                // var_dump($this->content);
-                $content = $this->render();
-            } */
-
             $modalRaw = [
                 '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
                 '<div class="modal__overlay" tabindex="-1" data-micromodal-close>',
@@ -278,26 +217,14 @@ namespace Donstrange\Modalsupport {
          */
         public function render(): string
         {
-            // $loader = new ArrayLoader(["tmp" => $this->getModalContent()]);
-            // $path = self::$modalArtifactsPath;
-
             if ($this->hasTabs) {
                 $data = $this->tabView->render();
-                // print_r($content);
-                // $content = file_get_contents(self::$modalArtifactsPath . "/" . $this->modalFilename . ".html");
-
-                // $content = $this->readTemplate($this->modalFilename, $this->templateData);
-                // var_dump($this->modalFilename);
             } else {
-                // var_dump($this->content);
-                // $content = $this->render();
                 $loader = new FilesystemLoader([
                     self::$modalArtifactsPath
                 ]);
                 
                 $twig = new Environment($loader);
-                
-                // var_dump($this->modalFilename);
 
                 $masterData = [];
 
@@ -306,10 +233,8 @@ namespace Donstrange\Modalsupport {
                 }
                 
                 $data = $twig->render($this->modalFilename . ".html", $this->templateData);
-                // return $this->getModalContent($data);
             }
             return $this->getModalContent($data);
-            //return $this->getModalContent();
         }
     }
 }

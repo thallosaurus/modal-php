@@ -1,2 +1,5 @@
 vendor/
 **/php/caches/*
+node_modules/
+.phpdoc/
+docs/

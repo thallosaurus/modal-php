@@ -6,6 +6,7 @@ An easy way for PHP Applications to embed Dialog Windows - Powered by [micromoda
 #### Requirements
 - [Composer](https://getcomposer.org/)
 - [Docker or similar (for development)](https://www.docker.com/)
+- [phpDocumentor](https://docs.phpdoc.org/)
 
 #### Setup
 Add the following to your `composer.json` file:
@@ -29,7 +30,8 @@ An open dialog can send information back to the calling function in two differen
 - by resolving the returned promise [1](#-using-channel-1-)
 - by calling the supplied callback function [2](#-using-channel-2-)
 
-Technically there is also a third way [3](#channel-3), by using the dataset way micromodal.js provides. A shortcut function is available with the `Modal#getOpenButton($label);` function that returns the button as string. This discards the input data and can be used for simple info dialogs. You can override this behaivor by adding `data-modal-ignore` to the input.
+Technically there is also a third way [3](#channel-3), by using the dataset way micromodal.js provides. A shortcut function is available with the `Modal#getOpenButton($label);` function that returns the button as string. This discards the input data and can be used for simple info dialogs.
+You can override this behaivor by adding `data-modal-ignore` to the input. Every Input-Element with this attribute gets also skipped in the conversion to an object.
 
 The modal-Promise will always reject if the user cancels the modal. You either have to catch it with `Promise.catch()` or let it silently fail.
 
@@ -90,3 +92,6 @@ You can customize the absolute path where the library should search for modal-te
 //Sets template path to ./example
 TemplateLoader::setModalPath(__DIR__ . "/example");
 ```
+
+### Documentation
+You can generate a documentation by running `composer docs`. 
