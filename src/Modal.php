@@ -10,10 +10,10 @@ namespace Donstrange\Modalsupport {
     const SHOW_CLOSE = 0b010;
     const SHOW_CLOSE_X = 0b100;
 
+    // const DEFAULT_DIALOG_TEMPLATE = "moin";
+
     class Modal extends TemplateLoader
     {
-
-
         /**
          * Holds all declared modals
          *
@@ -36,6 +36,10 @@ namespace Donstrange\Modalsupport {
         private ?string $modalFilename;
 
         //private $data = [];
+
+        private string $baseFilepath;
+
+        private bool $usesCustomPath = false;
 
         /**
          * Given content of the modal
@@ -71,6 +75,7 @@ namespace Donstrange\Modalsupport {
             // parent::__construct();
             $this->modalId = $id;
             $this->modalFilename = $filename;
+            $this->baseFilepath = __DIR__ . "/../base/base.html";
             self::$modals[] = $this;
         }
 
@@ -166,6 +171,15 @@ namespace Donstrange\Modalsupport {
         }
 
         /**
+         * Sets the Path to the template that should be used as base for this dialog
+         * @param string $tmplPath The path to the template base
+         */
+        public function setBaseTemplatePath($tmplPath) {
+            $this->baseFilepath = $tmplPath;
+            $this->usesCustomPath = true;
+        }
+
+        /**
          * Sets and activates a tab view for the modal
          * @param TabView $view The Tabview to be used
          * @return void
@@ -184,31 +198,23 @@ namespace Donstrange\Modalsupport {
          */
         public function getModalContent($content): string
         {
-            $modalRaw = [
-                '<div class="modal micromodal-slide" id="' . $this->modalId . '" aria-hidden="true">',
-                '<div class="modal__overlay" tabindex="-1" data-micromodal-close>',
-                '<div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="' . $this->modalId . '-title">',
-                '<form action="#"' . ($this->hasTabs ? " data-has-tabs" : "") . '>',
-                '<header class="modal__header">',
-                '<h2 class="modal__title" id="' . $this->modalId . '-title">',
-                $this->title,
-                '</h2>',
-                (($this->visibleFlags & SHOW_CLOSE_X) == SHOW_CLOSE_X) ? '<button class="modal__close" aria-label="Close modal" data-modal-ignore data-micromodal-close></button>' : '',
-                '</header>',
-                '<main class="modal__content" id="' . $this->modalId . '-content">',
-                $content,
-                '</main>',
-                '<footer class="modal__footer">',
-                (($this->visibleFlags & SHOW_SUBMIT) == SHOW_SUBMIT) ? '<input class="modal__btn modal__btn-primary" data-ok type="submit" value="'.$this->submitLabel.'">' : '',
-                (($this->visibleFlags & SHOW_CLOSE) == SHOW_CLOSE) ? '<button class="modal__btn" data-micromodal-close data-cancel data-modal-ignore aria-label="Close this dialog window">'. $this->closeLabel .'</button>' : '',
-                '</footer>',
-                '</form>',
-                '</div>',
-                '</div>',
-                '</div>'
-            ];
+            $loader = new FilesystemLoader([
+                dirname($this->baseFilepath)
+            ]);
+            
+            $twig = new Environment($loader);
 
-            return join("", $modalRaw);
+            return $twig->render(basename($this->baseFilepath), [
+                "modalId" => $this->modalId,
+                "hasTabs" => $this->hasTabs,
+                "modalTitle" => $this->title,
+                "showCloseX" => ($this->visibleFlags & SHOW_CLOSE_X) == SHOW_CLOSE_X,
+                "showSubmit" => (($this->visibleFlags & SHOW_SUBMIT) == SHOW_SUBMIT),
+                "showClose" => (($this->visibleFlags & SHOW_CLOSE) == SHOW_CLOSE),
+                "submitLabel" => $this->submitLabel,
+                "closeLabel" => $this->closeLabel,
+                "content" => $content
+            ]);
         }
 
         /**
