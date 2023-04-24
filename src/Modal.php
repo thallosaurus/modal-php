@@ -60,8 +60,8 @@ namespace Donstrange\Modalsupport {
         private bool $hasTabs = false;
         private TabView $tabView;
 
-        private string $closeLabel = "Schließen";
-        private string $submitLabel = "Absenden";
+        private string $closeLabel = "Abbrechen";
+        private string $submitLabel = "OK";
 
         // private string $modalArtifactName;
 

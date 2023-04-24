@@ -16,7 +16,7 @@
     "scripts": {
         "start": [
             "Composer\\Config::disableProcessTimeout",
-            "php -S 0.0.0.0:8080"
+            "php -S 0.0.0.0:8080 index.php"
         ],
         "docs": [
             "phpDocumentor -d src/ -t docs/"
