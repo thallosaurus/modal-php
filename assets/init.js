@@ -31,7 +31,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
             btnevent.preventDefault();
 
             let eventName = Boolean(btnevent.target.dataset.modalEvent) ? btnevent.target.dataset.modalEvent : "data";
-  
+
             evtarget.dispatchEvent(new CustomEvent("data", {
               detail: {
                 event: btnevent.target.dataset.action,
@@ -39,7 +39,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
                 ...createObjectFromForm(form)
               }
             }));
-  
+
           }, {
             signal: abortController.signal
           });
@@ -137,7 +137,7 @@ function createObjectFromForm(form) {
   let currentTab = null;
 
   if (Object.keys(form.dataset).includes("hasWidget")) {
-    currentTab = "tab"+form.querySelector(".w-tab > input[type='radio']:checked").dataset.tabid;
+    currentTab = "tab" + form.querySelector(".w-tab > input[type='radio']:checked").dataset.tabid;
     form = form.querySelectorAll(/* ".w-tab input[type='radio']:checked ~  */".tab-content input, "/* .w-tab input[type='radio']:checked ~ */ + ".tab-content select");
   }
 
@@ -165,7 +165,7 @@ function createObjectFromForm(form) {
           } else {
             continue;
           }
-        break;
+          break;
 
         default:
           value = t.value;
