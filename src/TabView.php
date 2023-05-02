@@ -10,11 +10,7 @@ namespace Donstrange\Modalsupport {
          */
         private array $tabs = [];
 
-        /**
-         * Backreference to the parent Modal
-         * @var Modal|null
-         */
-        private ?Modal $ref = null;
+
 
         /**
          * Adds a template to the TabView
@@ -45,7 +41,7 @@ namespace Donstrange\Modalsupport {
             //change to better value
             $nonce = rand(0, 100000);
 
-            $masterData = [];
+            // $masterData = [];
 
             return join("", [
                 '<div class="w-tab">',
@@ -56,15 +52,6 @@ namespace Donstrange\Modalsupport {
                 '</div>',
                 '</div>',
             ]);
-        }
-
-        /**
-         * @deprecated v0.0.2
-         * @param Modal $modal
-         * @return void
-         */
-        public function setRef(Modal $modal) {
-            $this->ref = $modal;
         }
 
         /**

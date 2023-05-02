@@ -57,8 +57,11 @@ namespace Donstrange\Modalsupport {
 
         private int $visibleFlags = SHOW_SUBMIT | SHOW_CLOSE | SHOW_CLOSE_X;
 
-        private bool $hasTabs = false;
-        private TabView $tabView;
+        private bool $hasWidgetContent = false;
+        // private TabView $tabView;
+        // private SlidingView $slidingView;
+
+        private TemplateLoader $widget;
 
         private string $closeLabel = "Abbrechen";
         private string $submitLabel = "OK";
@@ -187,8 +190,14 @@ namespace Donstrange\Modalsupport {
         public function addTabView(TabView $view)
         {
             $view->setRef($this);
-            $this->tabView = $view;
-            $this->hasTabs = true;
+            $this->widget = $view;
+            $this->hasWidgetContent = true;
+        }
+
+        public function addSlidingView(SlidingView $view) {
+            $view->setRef($this);
+            $this->widget = $view;
+            $this->hasWidgetContent = true;
         }
 
         /**
@@ -206,7 +215,7 @@ namespace Donstrange\Modalsupport {
 
             return $twig->render(basename($this->baseFilepath), [
                 "modalId" => $this->modalId,
-                "hasTabs" => $this->hasTabs,
+                "hasTabs" => $this->hasWidgetContent,
                 "modalTitle" => $this->title,
                 "showCloseX" => ($this->visibleFlags & SHOW_CLOSE_X) == SHOW_CLOSE_X,
                 "showSubmit" => (($this->visibleFlags & SHOW_SUBMIT) == SHOW_SUBMIT),
@@ -223,8 +232,8 @@ namespace Donstrange\Modalsupport {
          */
         public function render(): string
         {
-            if ($this->hasTabs) {
-                $data = $this->tabView->render();
+            if ($this->hasWidgetContent) {
+                $data = $this->widget->render();
             } else {
                 $loader = new FilesystemLoader([
                     self::$modalArtifactsPath

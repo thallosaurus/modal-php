@@ -2,6 +2,7 @@
 require 'vendor/autoload.php';
 
 use Donstrange\Modalsupport\Modal;
+use Donstrange\Modalsupport\SlidingView;
 use Donstrange\Modalsupport\TabView;
 
 use Donstrange\Modalsupport\TemplateLoader;
@@ -88,6 +89,11 @@ use const Donstrange\Modalsupport\SHOW_SUBMIT;
     $tabs->addTemplate("Tab 2", "tabs/tab2");
     $tabs->addTemplate("Tab 3", "tabs/tab3");
     $tabModal->addTabView($tabs);
+
+    $tabSliding = new Modal("sliding-example");
+    $slider = new SlidingView();
+    $tabSliding->addSlidingView($slider);
+    echo $tabSliding->getOpenButton("Sliding View");
 
     //required, renders all defined modals to html and echos it
     echo Modal::getAllModals();

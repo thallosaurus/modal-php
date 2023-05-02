@@ -29,6 +29,12 @@ namespace Donstrange\Modalsupport {
         /* TWIG END */
 
         /**
+         * Backreference to the parent Modal
+         * @var Modal|null
+         */
+        protected ?Modal $ref = null;
+
+        /**
          * Only if it is not initialized yet it should assign a new Filesystem Loader
          */
         function __construct()
@@ -61,8 +67,18 @@ namespace Donstrange\Modalsupport {
          * @param mixed $mfilename Filename of the template (without extension)
          * @return \Twig\TemplateWrapper
          */
-        public function readTemplate($mfilename): \Twig\TemplateWrapper {
+        public function readTemplate($mfilename): \Twig\TemplateWrapper
+        {
             return self::$twig->load($mfilename);
+        }
+
+        /**
+         * @param Modal $modal
+         * @return void
+         */
+        public function setRef(Modal $modal)
+        {
+            $this->ref = $modal;
         }
 
         /**
