@@ -1,5 +1,100 @@
 let abortSignals = new Map();
 
+function initListener(modal, form, abortController, res, rej, eventCallback) {
+  if (eventCallback) {
+
+    let evtarget = new EventTarget();
+    evtarget.addEventListener("data", (d) => {
+      eventCallback({
+        ...d.detail,
+        form: form
+      });
+    }, {
+      signal: abortController.signal
+    });
+
+    modal.querySelectorAll("button[data-modal-event]").forEach(btn => {
+      btn.addEventListener("click", (btnevent) => {
+        btnevent.preventDefault();
+
+        let eventName = Boolean(btnevent.target.dataset.modalEvent) ? btnevent.target.dataset.modalEvent : "data";
+
+        evtarget.dispatchEvent(new CustomEvent("data", {
+          detail: {
+            event: btnevent.target.dataset.action,
+            eventName: eventName,
+            ...createObjectFromForm(form)
+          }
+        }));
+
+      }, {
+        signal: abortController.signal
+      });
+    })
+  }
+
+  modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
+
+    btn.addEventListener("click", (btnevent) => {
+      btnevent.preventDefault();
+      MicroModal.close(modal.id);
+      res({
+        event: "button",
+        action: btnevent.target.dataset.action,
+        ...createObjectFromForm(form)
+      });
+    }, {
+      signal: abortController.signal
+    });
+
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    // debugger;
+    let data = createObjectFromForm(event.target);
+    // console.log(data);
+    res && res(data);
+    MicroModal.close(modal.id);
+    form.reset();
+  }, {
+    signal: abortController.signal
+  });
+
+  form.addEventListener("keydown", (e) => {
+    switch (e.key) {
+      //User used enter to submit form. Close Window and resolve with object
+      case "Enter":
+        e.preventDefault();
+        res && res(createObjectFromForm(form));
+        MicroModal.close(modal.id);
+        form.reset();
+        break;
+
+      //escape was pressed, close window and reject
+      case "Escape":
+        e.preventDefault();
+        rej && rej();
+        form.reset();
+        MicroModal.close(modal.id);
+        break;
+    }
+  }, {
+    capture: false,
+    signal: abortController.signal
+  });
+
+  let closeBtns = modal.querySelectorAll("[data-cancel]");
+  closeBtns.forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      form.reset();
+      rej && rej();
+    });
+  }, {
+    signal: abortController.signal
+  });
+}
+
 /**
  * Create Options for Micromodal.
  *
@@ -11,99 +106,24 @@ function createOptions(res = null, rej = null, eventCallback = null) {
   return {
     onShow: modal => {
       //is used to remove all event listeners at once after close
-      let abortController = new AbortController();
       let form = modal.querySelector("form");
-
-      if (eventCallback) {
-
-        let evtarget = new EventTarget();
-        evtarget.addEventListener("data", (d) => {
-          eventCallback({
-            ...d.detail,
-            form: form
-          });
-        }, {
-          signal: abortController.signal
-        });
-
-        modal.querySelectorAll("button[data-modal-event]").forEach(btn => {
-          btn.addEventListener("click", (btnevent) => {
-            btnevent.preventDefault();
-
-            let eventName = Boolean(btnevent.target.dataset.modalEvent) ? btnevent.target.dataset.modalEvent : "data";
-
-            evtarget.dispatchEvent(new CustomEvent("data", {
-              detail: {
-                event: btnevent.target.dataset.action,
-                eventName: eventName,
-                ...createObjectFromForm(form)
-              }
-            }));
-
-          }, {
-            signal: abortController.signal
-          });
-        })
-      }
-
-      modal.querySelectorAll("button:not([data-modal-ignore]").forEach(btn => {
-
-        btn.addEventListener("click", (btnevent) => {
-          btnevent.preventDefault();
-          MicroModal.close(modal.id);
-          res({
-            event: "button",
-            action: btnevent.target.dataset.action,
-            ...createObjectFromForm(form)
-          });
-        }, {
-          signal: abortController.signal
-        });
-
+      
+      // let mutationObserver = 
+      const observer = new MutationObserver((mutationList, observer) => {
+        console.log(mutationList);
+        
+        abortSignals.get(modal.id).abort();
+        abortSignals.delete(modal.id);
+        
+        //restart abortcontroller
+        let abortController = new AbortController();
+        abortSignals.set(modal.id, abortController);
+        initListener(modal, form, abortController, res, rej, eventCallback);
       });
-
-      form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        let data = createObjectFromForm(event.target);
-        res && res(data);
-        MicroModal.close(modal.id);
-        form.reset();
-      }, {
-        signal: abortController.signal
-      });
-
-      form.addEventListener("keydown", (e) => {
-        switch (e.key) {
-          //User used enter to submit form. Close Window and resolve with object
-          case "Enter":
-            e.preventDefault();
-            res && res(createObjectFromForm(form));
-            MicroModal.close(modal.id);
-            form.reset();
-            break;
-
-          //escape was pressed, close window and reject
-          case "Escape":
-            e.preventDefault();
-            rej && rej();
-            form.reset();
-            MicroModal.close(modal.id);
-            break;
-        }
-      }, {
-        capture: false,
-        signal: abortController.signal
-      });
-
-      let closeBtns = modal.querySelectorAll("[data-cancel]");
-      closeBtns.forEach(btn => {
-        btn.addEventListener("click", (e) => {
-          form.reset();
-          rej && rej();
-        });
-      }, {
-        signal: abortController.signal
-      });
+      
+      const observerConfig = { attributes: true, childList: true, subtree: true };
+      observer.observe(form, observerConfig);
+      initListener(modal, form, abortController, res, rej, eventCallback);
 
       abortSignals.set(modal.id, abortController);
       //console.log(abortSignals);

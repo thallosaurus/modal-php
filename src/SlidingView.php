@@ -1,9 +1,29 @@
-<?php namespace Donstrange\Modalsupport {
-    
-    class SlidingView extends TemplateLoader
+<?php
+namespace Donstrange\Modalsupport {
+
+  const TEST_CONTENT = '<div data-current="0">
+    <div>
+      Page 1
+    </div>
+    <div>
+      Page 2
+    </div>
+    <div>
+      Page 3
+    </div>
+  </div>
+  <button type="button" data-modal-ignore>
+    Zurück
+  </button>
+  <button type="button" data-modal-ignore>
+    Vor
+  </button>';
+
+  class SlidingView extends TemplateLoader
+  {
+    public function render(): string
     {
-        public function render(): string {
-            return "this is a beta feature";
-        }
+      return TEST_CONTENT;
     }
+  }
 } ?>
