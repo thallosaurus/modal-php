@@ -107,6 +107,7 @@ function createOptions(res = null, rej = null, eventCallback = null) {
     onShow: modal => {
       //is used to remove all event listeners at once after close
       let form = modal.querySelector("form");
+      let abortController = new AbortController();
       
       // let mutationObserver = 
       const observer = new MutationObserver((mutationList, observer) => {
