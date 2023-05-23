@@ -65,6 +65,11 @@ namespace Donstrange\Modalsupport {
 
         private string $closeLabel = "Abbrechen";
         private string $submitLabel = "OK";
+        // private static bool $useIntegratedStyle = true;
+        // private static string $userStyle = "";
+
+        private static string $cssPath = "/../assets/micromodal.css";
+        private static string $tabPath = "/../assets/tabs.css";
 
         // private string $modalArtifactName;
 
@@ -113,8 +118,8 @@ namespace Donstrange\Modalsupport {
         public static function getAssets(): string
         {
             $jsData = file_get_contents(__DIR__ . "/../assets/micromodal.js");
-            $cssData = file_get_contents(__DIR__ . "/../assets/micromodal.css");
-            $tabCss = file_get_contents(__DIR__ . "/../assets/tabs.css");
+            $cssData = file_get_contents(__DIR__ . self::$cssPath);
+            $tabCss = file_get_contents(__DIR__ . self::$tabPath);
             $init = file_get_contents(__DIR__ . "/../assets/init.js");
             return "<style>" . $cssData . $tabCss . "</style>" . "<script>" . $jsData . $init . "</script>";
         }
@@ -250,6 +255,14 @@ namespace Donstrange\Modalsupport {
                 $data = $twig->render($this->modalFilename . ".html", $this->templateData);
             }
             return $this->getModalContent($data);
+        }
+
+        public static function setUserstyle(string $path) {
+            self::$cssPath = $path;
+        }
+
+        public static function setTabstyle(string $path) {
+            self::$tabPath = $path;
         }
     }
 }
